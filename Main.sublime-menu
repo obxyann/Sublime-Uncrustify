@@ -1,0 +1,56 @@
+[
+	{
+		"id": "tools",
+		"children":
+		[
+			{
+				"id": "uncrustify",
+				"caption": "Uncrustify",
+				"children":
+				[
+					{ "caption": "Format Document", "command": "uncrustify_document" },
+					{ "caption": "Format Selection", "command": "uncrustify_selection" },
+				]
+			}
+		]
+	},
+	{
+		"id": "preferences",
+		"children":
+		[
+			{
+				"id": "package-settings",
+				"caption": "Package Settings",
+				"mnemonic": "P",
+				"children":
+				[
+					{
+						"caption": "Uncrustify",
+						"children":
+						[
+                            {
+                            	"caption": "Settings – Default",
+                                "command": "open_file",
+                                "args": {"file": "${packages}/Uncrustify/Uncrustify.sublime-settings"}
+                            },
+                            {
+                                "caption": "Settings – User",
+                                "command": "open_file",
+                                "args": {"file": "${packages}/User/Uncrustify.sublime-settings"}
+                            },
+                            { "caption": "-" },
+							{
+								"caption": "Open Uncrustify Config - Default",
+								"command": "uncrustify_open_cfg"
+							},
+							{
+								"caption": "Open Uncrustify Config - Matches Current Document",
+								"command": "uncrustify_open_cfg_current"
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]
