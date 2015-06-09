@@ -7,9 +7,9 @@
   // Specifies the config file for uncrustify when not set UNCRUSTIFY_CONFIG.
   // For example:
   //	"uncrustify_config" : "C:/UTILS/Devel/uncrustify/cfg/defaults.cfg"
-  // NOTE: 
+  // NOTE:
   //	You can copy the example config files in Uncrustify/etc (Source) or Uncrustify/cfg (Win32 pre-built)
-  //	and modify as your version. 
+  //	and modify as your version.
   "uncrustify_config" : "",
 
   // Overrides the default config (aka "uncrustify_config") when document
@@ -35,7 +35,7 @@
 
   // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when
   // filename appears one of below strings.
-  // NOTE: 
+  // NOTE:
   // Please use long string to avoid the incident match.
   "uncrustify_config_by_filter" :
   [
