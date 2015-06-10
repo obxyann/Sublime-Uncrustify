@@ -8,14 +8,14 @@
   // For example:
   //	"uncrustify_config" : "C:/UTILS/Devel/uncrustify/cfg/defaults.cfg"
   // NOTE:
-  //	You can copy the example config files in Uncrustify/etc (Source) or Uncrustify/cfg (Win32 pre-built)
-  //	and modify as your version.
+  //	You can copy the example config files in Uncrustify/etc (Source) or Uncrustify/cfg (Win32
+  //	pre-built) and modify as your version.
   "uncrustify_config" : "",
 
-  // Overrides the default config (aka "uncrustify_config") when document
-  // matches one of below languages.
+  // Overrides the default config (aka "uncrustify_config") when document matches one of below
+  // languages.
   // NOTE:
-  //	Don't use other keywords which uncrustify don't supported.
+  //	Don't use other language keywords which uncrustify don't supported.
   "uncrustify_config_by_lang" :
   [
 	// For example:
@@ -33,13 +33,13 @@
 	{ "ECMA" : "" }
   ],
 
-  // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when
-  // filename appears one of below strings.
+  // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when filename appears one
+  // of below strings.
   // NOTE:
-  // Please use long string to avoid the incident match.
+  //	Please use long string to avoid the incident match.
   "uncrustify_config_by_filter" :
   [
 	// For example:
-	// { "C:/projects/3rd-party/libjpeg" : "C:/cfg/linux.cfg" }
+	// { "C:/project-1/3rd-party/libjpeg" : "C:/cfg/linux.cfg" }
   ]
 }

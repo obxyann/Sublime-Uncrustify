@@ -8,11 +8,11 @@ This is a code beautifier/formatting plugin that allows the user to use [**Uncru
 
 1. A **Uncrustify** MUST be installed before **Sublime-Uncrustify** can work.
 
-    Win32 binary is availabled in [Sourceforge](http://sourceforge.net/projects/uncrustify/files/)
+    - Win32 binary is availabled in [Sourceforge](http://sourceforge.net/projects/uncrustify/files/).
 
-    OS X can install via **'brew install uncrustify'** by [Homebrew](http://brew.sh/) or **'port install uncrustify'** by [MacPorts](https://www.macports.org/)
+    - OS X can install via **'brew install uncrustify'** by [Homebrew](http://brew.sh/) or **'port install uncrustify'** by [MacPorts](https://www.macports.org/).
 
-    Other Linux-likes OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
+    - Other Linux-likes OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
 
 2. Configuring the **Uncrustify**:
 
@@ -26,11 +26,13 @@ This is a code beautifier/formatting plugin that allows the user to use [**Uncru
 
 2. Install **Sublime-Uncrustify**:
 
-    The preferred method is to use the [Sublime Package Manager](http://wbond.net/sublime_packages/package_control). Alternatively, the files can be obtained on github:
+    The preferred method is to use the Sublime package manager [Package Control](https://packagecontrol.io/).
+    
+    Alternatively, the files can be obtained on GitHub:
 
 	$ https://github.com/obxyann/Sublime-Uncrustify
 
-    Just create a folder as *Sublime_Text_Installed/Data/Packages/Uncrustify/* and copy the files into.
+    Just create a new folde named *Uncrustify* in your *Sublime_Text_Installed/Data/Packages/ and copy the files into.
 
 3. Configure the **Sublime-Uncrustify**:
 
@@ -66,15 +68,17 @@ This is a code beautifier/formatting plugin that allows the user to use [**Uncru
 
     ->[*Open Uncrustify Config - Matches Current Document*]
 
-      according current document matches the filter or language...
+      according current document matches one of filters or languages...
 
 ## Notices
 
-1. Some languages don't supported by **Uncrustify** will pop a warning.
+1. Some languages/extensions don't supported by **Uncrustify** will pop a warning.
 
 2. This is my first Python program. Before I have no knowledge about Python. I just read some sublime plugin codes of others, API docs and write after!
 
   **It is not guaranteed to work perfectly, please backup/SAVE your important/unsaved file before using!**
+
+3. Only tested in Windows 7 + Sublime Text 3. Please help to improve this plugin if it don't work in your OS!
 
 ## License
 
@@ -98,4 +102,4 @@ You can easily change your **Uncrusify** config file by:
 
 2. (OS X) UncrustifyX: https://github.com/ryanmaxwell/UncrustifyX/
 
-But I think the default config file *default.cfg* from **Uncrusify** is well documented!
+But I think the default config file *default.cfg* from **Uncrusify** is well documented to modify directly!
