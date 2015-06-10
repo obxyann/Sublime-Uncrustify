@@ -45,7 +45,7 @@ def getConfig():
 		# try from environment variable
 		config = os.getenv("UNCRUSTIFY_CONFIG", "")
 		if not config:
-			err = "Need to specify the config file in settings or set UNCRUSTIFY_CONFIG in OS"
+			err = "Need to specify the config file in settings or set UNCRUSTIFY_CONFIG in OS!"
 			sublime.error_message(err)
 			return ""
 		# only if exists
@@ -140,46 +140,54 @@ def guessLanguage(ext_name):
 	elif ext_name == ".es":
 		return "ECMA"
 
-	err = "Unknown extention '%s'" % ext_name
-	sublime.error_message(err)
+	msg = "Unknown file extention '%s'" % ext_name
+	sublime.message_dialog(msg)
 	return ""
 
 def getLanguage(view):
+	# get topmost scope
 	scope = view.scope_name(view.sel()[0].end())
 
+ 	# should be source.<lang_name>
 	result = re.search("\\bsource\\.([a-z+\-]+)", scope)
 
-	source = result.group(1) if result else "Plain Text"
-	# print(source)
-	if source == "Plain Text":
+	lang_name = result.group(1) if result else "Plain Text"
+	# print(lang_name)
+	if lang_name == "Plain Text":
 		# check if macth our extention names
-		file_name, ext_name = os.path.splitext(view.file_name())
+		path = view.file_name()
+		if not path:
+			msg = "Unknown language '%s'" % lang_name
+			sublime.message_dialog(msg)
+			return ""
+
+		file_name, ext_name = os.path.splitext(path)
 		return guessLanguage(ext_name)
 
-	if source == "c":
+	if lang_name == "c":
 		return "C"
-	elif source == "c++":
+	elif lang_name == "c++":
 		return "CPP"
-	elif source == "d":
+	elif lang_name == "d":
 		return "D"
-	elif source == "c#":
+	elif lang_name == "c#":
 		return "CS"
-	elif source == 'java':
+	elif lang_name == 'java':
 		return "JAVA"
-	elif source == "pawn":		# not listed in sublime default
+	elif lang_name == "pawn":	# not listed in sublime default
 		return "PAWN"
-	elif source == "objc":
+	elif lang_name == "objc":
 		return "OC"
-	elif source == "objc++":
+	elif lang_name == "objc++":
 		return "OC+"
-	elif source == "vala":		# not listed in sublime default
+	elif lang_name == "vala":	# not listed in sublime default
 		return "VALA"
-	elif source == "sql":
+	elif lang_name == "sql":
 		return "C"
-	elif source == "es":		# not listed in sublime default
+	elif lang_name == "es":		# not listed in sublime default
 		return "ECMA"
 
-	msg = "Unsupported language '%s'" % source
+	msg = "Unsupported language '%s'" % lang_name
 	sublime.message_dialog(msg)
 	return ""
 
@@ -258,7 +266,7 @@ class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
 		# make full view as region
 		region = sublime.Region(0, self.view.size())
 		if region.empty():
-			sublime.message_dialog("Empty document")
+			sublime.message_dialog("Empty document!")
 			return
 
 		# go
@@ -276,7 +284,7 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 		# 	...
 		region = sel[0]
 		if region.empty():
-			sublime.message_dialog("No selection")
+			sublime.message_dialog("No selection!")
 			return
 
 		# go
