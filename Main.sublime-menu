@@ -9,7 +9,7 @@
 				"children":
 				[
 					{ "caption": "Format Document", "command": "uncrustify_document" },
-					{ "caption": "Format Selection", "command": "uncrustify_selection" },
+					{ "caption": "Format Selection", "command": "uncrustify_selection" }
 				]
 			}
 		]

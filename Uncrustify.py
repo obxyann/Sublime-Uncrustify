@@ -45,7 +45,7 @@ def getConfig():
 		# try from environment variable
 		config = os.getenv("UNCRUSTIFY_CONFIG", "")
 		if not config:
-			err = "Need to specify the config file in settings or set UNCRUSTIFY_CONFIG in OS!"
+			err = "Need to specify the config file in Uncrustify settings\nor set UNCRUSTIFY_CONFIG in OS!"
 			sublime.error_message(err)
 			return ""
 		# only if exists
@@ -65,7 +65,7 @@ def getConfigByLang(lang):
 	configs = user_settings.get("uncrustify_config_by_lang", []) or \
 			  settings.get("uncrustify_config_by_lang", [])
 
-	# find one matched the lang
+	# find one matched the language
 	for each in configs:
 		for key, config in each.items():
 			# print(key, config)
@@ -140,7 +140,7 @@ def guessLanguage(ext_name):
 	elif ext_name == ".es":
 		return "ECMA"
 
-	msg = "Unknown file extention '%s'" % ext_name
+	msg = "Unknown file extension: %s" % ext_name
 	sublime.message_dialog(msg)
 	return ""
 
@@ -154,10 +154,10 @@ def getLanguage(view):
 	lang_name = result.group(1) if result else "Plain Text"
 	# print(lang_name)
 	if lang_name == "Plain Text":
-		# check if macth our extention names
+		# check if match our extension names
 		path = view.file_name()
 		if not path:
-			msg = "Unknown language '%s'" % lang_name
+			msg = "Unknown language: %s" % lang_name
 			sublime.message_dialog(msg)
 			return ""
 
@@ -187,7 +187,7 @@ def getLanguage(view):
 	elif lang_name == "es":		# not listed in sublime default
 		return "ECMA"
 
-	msg = "Unsupported language '%s'" % lang_name
+	msg = "Unsupported language: %s" % lang_name
 	sublime.message_dialog(msg)
 	return ""
 
@@ -202,7 +202,7 @@ def reformat(view, edit, region):
 
 	command.append(program)
 
-	# specify the lauguage override (because input is from stdin)
+	# specify the language override (because input is from stdin)
 	lang = getLanguage(view)
 	if not lang:
 		return
@@ -243,10 +243,14 @@ def reformat(view, edit, region):
 
 		# wait return
 		return_code = proc.poll()
-		if (return_code != 0):
+		if return_code != 0:
 			stderr = proc.communicate()[1]
-			print(" Error:\n" + stderr.decode("utf-8"))
-			raise Exception(("Non-zero return code (%d): " + stderr) % return_code)
+			if stderr:
+				err = "Found error in executing '%s':\n\n%s" % (command[0], stderr.decode("utf-8"))
+			else:
+				err = "Found error in executing '%s':\n\nCode %d" % (command[0], return_code)
+			sublime.error_message(err)
+			return
 
 		# print(output)
 
@@ -254,7 +258,11 @@ def reformat(view, edit, region):
 		view.replace(edit, region, output.decode("utf-8"))
 
 	except (OSError, ValueError, subprocess.CalledProcessError, Exception) as e:
-		err = "%s was unable to executed (%s)" % (command[0], traceback.print_exc())
+		# traceback.print_exc()
+		if command[0] == DefaulBinary:
+			err = "Cannot execute '%s' (from PATH)\n\n%s" % (command[0], e)
+		else:
+			err = "Cannot execute '%s'\n\n%s" % (command[0], e)
 		sublime.error_message(err)
 
 def open_file(window, file_name):
@@ -266,7 +274,8 @@ class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
 		# make full view as region
 		region = sublime.Region(0, self.view.size())
 		if region.empty():
-			sublime.message_dialog("Empty document!")
+			# sublime.message_dialog("Empty document!")
+			sublime.status_message("Empty document!")
 			return
 
 		# go
@@ -278,7 +287,7 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 		# get selections
 		sel = self.view.sel()
 
-		# pick 1st selection as regoin
+		# pick 1st selection as region
 		# TODO: try to support multi-selection...
 		# for region in self.view.sel():
 		# 	...
@@ -304,22 +313,22 @@ class UncrustifyOpenCfgCommand(sublime_plugin.WindowCommand):
 # open the config file which matches current document to edit
 class UncrustifyOpenCfgCurrentCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
-		# get the lauguage
+		# get the language
 		lang = getLanguage(self.view)
 		if not lang:
 			return
 
 		# specify the config file:
-		# try 1
+		# try 1, if matches one of filters
 		config = getConfigByFilter(self.view.file_name())
 		if not config:
 			return
-		# try 2
+		# try 2, if matches one of languages
 		if config == "none":
 			config = getConfigByLang(lang)
 			if not config:
 				return
-		# try 3
+		# try 3, use default
 		if config == "none":
 			config = getConfig()
 			if not config:
