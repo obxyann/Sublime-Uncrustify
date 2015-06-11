@@ -1,6 +1,6 @@
 # Sublime-Uncrustify
 
-This is a code beautifier/formatting plugin that allows the user to use [**Uncrustify**](http://uncrustify.sourceforge.net/)[*] to format the C-like language codes in Sublime Text.
+This is a code beautifier/formatter plugin that allows the user to use [**Uncrustify**](http://uncrustify.sourceforge.net/)[*] to format the C-like language codes in Sublime Text.
 
 [*]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
@@ -16,7 +16,7 @@ This is a code beautifier/formatting plugin that allows the user to use [**Uncru
 
 2. Configuring the **Uncrustify**:
 
-    Examine the example config files in *Uncrustify/etc* (Source) or *Uncrustify/cfg* (Win32 pre-built).
+    Examine the example config files in *Uncrustify/etc* (from source) or *Uncrustify/cfg* (from Win32 pre-built).
 
 	$ http://sourceforge.net/p/uncrustify/code/ci/master/tree/etc/
 
@@ -32,7 +32,7 @@ This is a code beautifier/formatting plugin that allows the user to use [**Uncru
 
 	$ https://github.com/obxyann/Sublime-Uncrustify
 
-    Just create a new folde named *Uncrustify* in your *Sublime_Text_Installed/Data/Packages/ and copy the files into.
+    Just create a new folde named *Uncrustify* under your **Sublime Text** *Packages* folder and copy the files into.
 
 3. Configure the **Sublime-Uncrustify**:
 
@@ -52,39 +52,41 @@ This is a code beautifier/formatting plugin that allows the user to use [**Uncru
 
     current document
 
-    [*sublime text*]->[*Tools*]->[*Uncrustify*]->[*Format Document*]
+    [*sublime text menu*]->[***Tools***]->[***Uncrustify***]->[***Format Document***]
 
 2. Format a selection:
 
     make a selection then
 
-    [*sublime text*]->[*Tools*]->[*Uncrustify*]->[*Format Selection*]
+    [*sublime text menu*]->[***Tools***]->[***Uncrustify***]->[***Format Selection***]
 
-3. You can edit the Uncrustify config file specified in settings:
+3. You can edit the **Uncrustify** config file specified in settings:
 
-    [*sublime text*]->[*Preferences*]->[*Package Settings*]->[*Uncrustify*]
+    [*sublime text menu*]->[***Preferences***]->[***Package Settings***]->[***Uncrustify***]
 
-    ->[*Open Uncrustify Config - Default*]
+    ->[***Open Uncrustify Config - Default***]
 
-    ->[*Open Uncrustify Config - Matches Current Document*]
+      for all languages/file types supported and no rule matches
 
-      according current document matches one of filters or languages...
+    ->[***Open Uncrustify Config - Matches Current Document***]
+
+      according to current document matches one of filters or languages...
 
 ## Notices
 
-1. Some languages/extensions don't supported by **Uncrustify** will pop a warning.
+1. Some languages/file types don't supported by **Uncrustify** will pop a warning.
 
 2. This is my first Python program. Before I have no knowledge about Python. I just read some sublime plugin codes of others, API docs and write after!
 
   **It is not guaranteed to work perfectly, please backup/SAVE your important/unsaved file before using!**
 
-3. Only tested in Windows 7 + Sublime Text 3. Please help to improve this plugin if it don't work in your OS!
+3. Only tested in Windows 7 + Sublime Text 2/3. Please help to improve this plugin if it don't work in your OS!
 
 ## License
 
 1. **Uncrustify** is GPL V2 belongs to its authors. (**Uncrustify** binary not include in **Sublime-Uncrustify**)
 
-2. All of **Sublime-Uncrustify** is licensed under the MIT license.
+2. **Sublime-Uncrustify** is released under the MIT license.
 
 ## Other Uncrustify Utilities
 

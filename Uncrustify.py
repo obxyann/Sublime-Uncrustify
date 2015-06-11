@@ -1,9 +1,6 @@
-# ref:
-# https://www.sublimetext.com/forum/viewtopic.php?f=3&t=11292
-# http://superuser.com/questions/556609/filtering-sublime-text-2-buffer-contents-through-an-external-program
-
-import sublime, sublime_plugin, subprocess, traceback, os.path
-import re
+import sublime, sublime_plugin
+import os.path, subprocess, traceback
+import re	# need regular expression operations
 
 DefaulBinary = "uncrustify"
 
@@ -68,7 +65,9 @@ def getConfigByLang(lang):
 	# find one matched the language
 	for each in configs:
 		for key, config in each.items():
+			# only for debug
 			# print(key, config)
+
 			if key and config and lang == key:
 				# only if exists
 				if not os.path.exists(config):
@@ -92,8 +91,12 @@ def getConfigByFilter(path_name):
 	# find one appeared in path_name
 	for each in configs:
 		for key, config in each.items():
+			# only for debug
 			# print(key, config)
+
 			if key and config and path_name.find(key):
+			# or key is regular expression
+			# if key and config and re.match(key, path_name)
 				# only if exists
 				if not os.path.exists(config):
 					err = "Cannot find '%s' (for %s)" % (config, lang)
@@ -152,7 +155,9 @@ def getLanguage(view):
 	result = re.search("\\bsource\\.([a-z+\-]+)", scope)
 
 	lang_name = result.group(1) if result else "Plain Text"
+	# only for debug
 	# print(lang_name)
+
 	if lang_name == "Plain Text":
 		# check if match our extension names
 		path = view.file_name()
@@ -195,6 +200,9 @@ def reformat(view, edit, region):
 	content = view.substr(region)
 	command = []
 
+	# only for debug
+	# print(content)
+
 	# assign the external program
 	program = getProgram()
 	if not program:
@@ -229,10 +237,18 @@ def reformat(view, edit, region):
 	command.append("-c")
 	command.append(config)
 
-	print(command)
-	# MEMO:
-	# command[] should like
-	# ['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/ob.cfg']
+	# only for debug
+	#	command[] should like
+	#	['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/ob.cfg']
+	# print(command)
+
+	# dump command[]
+	msg = ""
+	for str in command:
+		msg += str
+		msg += " "
+	print("> " + msg + "...")
+	sublime.status_message(msg + "...")
 
 	try:
 		# run
@@ -252,13 +268,16 @@ def reformat(view, edit, region):
 			sublime.error_message(err)
 			return
 
+		# only for debug
 		# print(output)
 
 		# replace by result
 		view.replace(edit, region, output.decode("utf-8"))
 
 	except (OSError, ValueError, subprocess.CalledProcessError, Exception) as e:
+		# only for debug
 		# traceback.print_exc()
+
 		if command[0] == DefaulBinary:
 			err = "Cannot execute '%s' (from PATH)\n\n%s" % (command[0], e)
 		else:
@@ -285,13 +304,13 @@ class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
 class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		# get selections
-		sel = self.view.sel()
+		sels = self.view.sel()
 
 		# pick 1st selection as region
 		# TODO: try to support multi-selection...
-		# for region in self.view.sel():
+		# for region in sels
 		# 	...
-		region = sel[0]
+		region = sels[0]
 		if region.empty():
 			sublime.message_dialog("No selection!")
 			return
