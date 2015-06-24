@@ -1,8 +1,8 @@
 {
   // Specifies the path to uncrustify binary when not in the PATH.
   // For example:
-  //	"uncrustify_binary" : "C:/UTILS/Devel/uncrustify/uncrustify.exe"
-  "uncrustify_binary" : "",
+  //	"uncrustify_executable" : "C:/UTILS/Devel/uncrustify/uncrustify.exe"
+  "uncrustify_executable" : "",
 
   // Specifies the config file for uncrustify when not set UNCRUSTIFY_CONFIG.
   // For example:

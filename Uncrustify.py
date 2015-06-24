@@ -2,27 +2,27 @@ import sublime, sublime_plugin
 import os.path, subprocess, traceback
 import re	# need regular expression operations
 
-DefaulBinary = "uncrustify"
+DefaulExecutable = "uncrustify"
 
-def getProgram():
+def getExecutable():
 	# load settings
 	settings = sublime.load_settings("Uncrustify.sublime-settings")
 	user_settings = sublime.load_settings("Preferences.sublime-settings")
 
-	# get binary setting
-	program = user_settings.get("uncrustify_binary") or \
-			    settings.get("uncrustify_binary")
-	if program:
+	# get executable setting
+	executable = user_settings.get("uncrustify_executable") or \
+			    settings.get("uncrustify_executable")
+	if executable:
 		# only if exists
-		if not os.path.exists(program):
-			err = "Cannot find '%s'" % program
+		if not os.path.exists(executable):
+			err = "Cannot find '%s'\n\nCheck your Uncrustify settings!" % executable
 			sublime.error_message(err)
 			return ""
 	else:
 		# will find uncrustify in PATH
-		program = DefaulBinary
+		executable = DefaulExecutable
 
-	return program
+	return executable
 
 def getConfig():
 	# load settings
@@ -35,7 +35,7 @@ def getConfig():
 	if config:
 		# only if exists
 		if not os.path.exists(config):
-			err = "Cannot find '%s'" % config
+			err = "Cannot find '%s'\n\nCheck your Uncrustify settings!" % config
 			sublime.error_message(err)
 			return ""
 	else:
@@ -71,7 +71,7 @@ def getConfigByLang(lang):
 			if key and config and lang == key:
 				# only if exists
 				if not os.path.exists(config):
-					err = "Cannot find '%s' (for %s)" % (config, lang)
+					err = "Cannot find '%s' (for %s)\n\nCheck your Uncrustify settings!" % (config, lang)
 					sublime.error_message(err)
 					return ""
 				return config
@@ -99,7 +99,7 @@ def getConfigByFilter(path_name):
 			# if key and config and re.match(key, path_name)
 				# only if exists
 				if not os.path.exists(config):
-					err = "Cannot find '%s' (for %s)" % (config, lang)
+					err = "Cannot find '%s' (for %s)\n\nCheck your Uncrustify settings!" % (config, lang)
 					sublime.error_message(err)
 					return ""
 				return config
@@ -204,7 +204,7 @@ def reformat(view, edit, region):
 	# print(content)
 
 	# assign the external program
-	program = getProgram()
+	program = getExecutable()
 	if not program:
 		return
 
@@ -239,7 +239,7 @@ def reformat(view, edit, region):
 
 	# only for debug
 	#	command[] should like
-	#	['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/ob.cfg']
+	#	['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/my.cfg']
 	# print(command)
 
 	# dump command[]
@@ -278,8 +278,8 @@ def reformat(view, edit, region):
 		# only for debug
 		# traceback.print_exc()
 
-		if command[0] == DefaulBinary:
-			err = "Cannot execute '%s' (from PATH)\n\n%s" % (command[0], e)
+		if command[0] == DefaulExecutable:
+			err = "Cannot execute '%s' (from PATH)\n\n%s\n\nNeed to specify the executable file in Uncrustify settings!" % (command[0], e)
 		else:
 			err = "Cannot execute '%s'\n\n%s" % (command[0], e)
 		sublime.error_message(err)
@@ -327,7 +327,6 @@ class UncrustifyOpenCfgCommand(sublime_plugin.WindowCommand):
 
 		# go
 		open_file(self.window, config)
-
 
 # open the config file which matches current document to edit
 class UncrustifyOpenCfgCurrentCommand(sublime_plugin.TextCommand):
