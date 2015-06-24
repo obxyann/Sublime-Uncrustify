@@ -1,6 +1,8 @@
 # Sublime-Uncrustify
 
-This is a source code beautifier/formatter plugin that allows the user to use [**Uncrustify**](http://uncrustify.sourceforge.net/)[*] to format the C-like languages in Sublime Text.
+This is a source code beautifier/formatter plugin that allows the user to use [**Uncrustify**](http://uncrustify.sourceforge.net/)[*] to format the C-like languages in **Sublime Text**.
+
+It is possible to use different code styles according to the languages and filenames.
 
 [*]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
@@ -52,6 +54,8 @@ This is a source code beautifier/formatter plugin that allows the user to use [*
 
     3. Specify the config file for uncrustify...(where step 2 copied and modified)
 
+    4. Add your rules to use different config files (code styles) according to the languages and filenames.
+
 ## Usage
 
 > **NOTE:** Although it can UNDO after a formatted action, please backup/SAVE your important/unsaved file before using!
@@ -87,6 +91,8 @@ This is a source code beautifier/formatter plugin that allows the user to use [*
 ## Notices
 
 1. Some languages/file types don't supported by **Uncrustify** will pop a warning.
+
+   **Currently only supports C, C++, D, C#, Java, Pawn, Objective C, Objective C++, Vala, SQL and ECMA.**
 
 2. This is my first Python program. Before I have no knowledge about Python. So I must warn again...
 
