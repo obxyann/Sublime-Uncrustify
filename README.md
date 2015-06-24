@@ -1,10 +1,10 @@
 # Sublime-Uncrustify
 
-This is a source code beautifier/formatter plugin that allows the user to use [**Uncrustify**](http://uncrustify.sourceforge.net/)[*] to format the C-like languages in **Sublime Text**.
+This is a source code beautifier/formatter plugin that allows the user to use **Uncrustify**[^] to format the C-like languages in **Sublime Text**.
 
 It is possible to use different code styles according to the languages and filenames.
 
-[*]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
+[^]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
 ## Screenshot
 
@@ -29,11 +29,11 @@ It is possible to use different code styles according to the languages and filen
     or you can find in:
     http://sourceforge.net/p/uncrustify/code/ci/master/tree/etc/
 
-    Copy the existing config file that closely matches your style and modify[**] as your version.
+    Copy the existing config file that closely matches your style and modify[^^] as your version.
 
     Rememebr the path of your config file for uncrustify (for step 3.3).
 
-    [**]: See 'Other Uncrustify Utilities' below...
+    [^^]: See 'Other Uncrustify Utilities' below...
 
 2. Install **Sublime-Uncrustify**:
 
