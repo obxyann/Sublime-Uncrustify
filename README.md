@@ -4,6 +4,10 @@ This is a source code beautifier/formatter plugin that allows the user to use [*
 
 [*]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
+## Screenshot
+
+![screenshot](https://raw.github.com/obxyann/Sublime-Uncrustify/master/Screenshot.gif)
+
 ## Install
 
 1. A **Uncrustify** MUST be installed before **Sublime-Uncrustify** can work.
@@ -32,7 +36,7 @@ This is a source code beautifier/formatter plugin that allows the user to use [*
 2. Install **Sublime-Uncrustify**:
 
     The preferred method is to use the Sublime package manager [Package Control](https://packagecontrol.io/).
-    
+
     Alternatively, the files can be obtained on GitHub:
     https://github.com/obxyann/Sublime-Uncrustify
 
@@ -54,17 +58,21 @@ This is a source code beautifier/formatter plugin that allows the user to use [*
 
 1. Format whole document:
 
-    current document
+    Current document
 
     [*sublime text menu*]->[***Tools***]->[***Uncrustify***]->[***Format Document***]
 
 2. Format a selection:
 
-    make a selection then
+    Make a selection then
 
     [*sublime text menu*]->[***Tools***]->[***Uncrustify***]->[***Format Selection***]
 
-3. You can edit the **Uncrustify** config file specified in settings:
+3. Undo formatted:
+
+    Just ***Undo*** before exit.
+
+4. You can edit the **Uncrustify** config file specified in settings:
 
     [*sublime text menu*]->[***Preferences***]->[***Package Settings***]->[***Uncrustify***]
 
