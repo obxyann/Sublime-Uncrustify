@@ -1,10 +1,10 @@
 # Sublime-Uncrustify
 
-This is a source code beautifier/formatter plugin that allows the user to use **Uncrustify**[^] to format the C-like languages in **Sublime Text**.
+This is a source code beautifier/formatter plugin that allows the user to use **Uncrustify**[!] to format the C-like languages in **Sublime Text**.
 
 It is possible to use different code styles according to the languages and filenames.
 
-[^]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
+[!]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
 ## Screenshot
 
@@ -14,9 +14,9 @@ It is possible to use different code styles according to the languages and filen
 
 1. A **Uncrustify** MUST be installed before **Sublime-Uncrustify** can work.
 
-   >- An Win32 binary is availabled in [Sourceforge](http://sourceforge.net/projects/uncrustify/files/).
+   >- An Win32 binary is availabled in [**Sourceforge**](http://sourceforge.net/projects/uncrustify/files/).
    >
-   >- OS X can install via **'brew install uncrustify'** by [Homebrew](http://brew.sh/) or **'port install uncrustify'** by [MacPorts](https://www.macports.org/).
+   >- OSX can install via **'brew install uncrustify'** by [**Homebrew**](http://brew.sh/) or **'port install uncrustify'** by [**MacPorts**](https://www.macports.org/).
    >
    >- Other Linux-like OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
 
@@ -29,17 +29,17 @@ It is possible to use different code styles according to the languages and filen
     or you can find in:
     http://sourceforge.net/p/uncrustify/code/ci/master/tree/etc/
 
-    Copy the existing config file that closely matches your style and modify[^^] as your version.
+    Copy the existing config file that closely matches your style and modify[!!] as your version.
 
     Rememebr the path of your config file for uncrustify (for step 3.3).
 
-    [^^]: See 'Other Uncrustify Utilities' below...
+    [!!]: See 'Other Uncrustify Utilities' below...
 
 2. Install **Sublime-Uncrustify**:
 
-    The preferred method is to use the Sublime package manager [Package Control](https://packagecontrol.io/).
+    The preferred method is to use the Sublime package manager [**Package Control**](https://packagecontrol.io/).
 
-    Alternatively, the files can be obtained on GitHub:
+    Alternatively, the files can be obtained on **GitHub**:
     https://github.com/obxyann/Sublime-Uncrustify
 
     Just create a new folde named *Uncrustify* under your **Sublime Text** *Packages* folder and copy the files into.
@@ -98,21 +98,20 @@ It is possible to use different code styles according to the languages and filen
 
   **It is not guaranteed to work perfectly, please backup/SAVE your important/unsaved file before using!**
 
-3. Only tested in Windows 7 + Sublime Text 2/3. Please help to improve this plugin if it don't work in your OS!
+3. Only tested in **Windows 7** + **Sublime Text 2/3**. Please help to improve this plugin if it don't work in your OS!
 
 ## License
 
-1. **Uncrustify** is GPL V2 belongs to its authors. (**Uncrustify** binary not include in **Sublime-Uncrustify**)
+1. **Uncrustify** is **GPL** V2 belongs to its authors. (**Uncrustify** binary not include in **Sublime-Uncrustify**)
 
-2. **Sublime-Uncrustify** is released under the MIT license.
+2. **Sublime-Uncrustify** is released under the **MIT** license.
 
 ## Other Uncrustify Utilities
 
 You can change your **Uncrusify** config file easily by:
 
-1. (WIN32) universalindent: http://universalindent.sourceforge.net/
+1. (WIN32) **universalindent**: http://universalindent.sourceforge.net/
 
-2. (OS X) UncrustifyX: https://github.com/ryanmaxwell/UncrustifyX/
+2. (OSX) **UncrustifyX**: https://github.com/ryanmaxwell/UncrustifyX/
 
 But I think the default config file *default.cfg* from **Uncrusify** is well documented to modify directly!
-

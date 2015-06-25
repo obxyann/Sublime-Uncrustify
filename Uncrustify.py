@@ -2,7 +2,7 @@ import sublime, sublime_plugin
 import os.path, subprocess, traceback
 import re	# need regular expression operations
 
-DefaulExecutable = "uncrustify"
+DefaultExecutable = "uncrustify"
 
 def getExecutable():
 	# load settings
@@ -20,7 +20,7 @@ def getExecutable():
 			return ""
 	else:
 		# will find uncrustify in PATH
-		executable = DefaulExecutable
+		executable = DefaultExecutable
 
 	return executable
 
@@ -278,7 +278,7 @@ def reformat(view, edit, region):
 		# only for debug
 		# traceback.print_exc()
 
-		if command[0] == DefaulExecutable:
+		if command[0] == DefaultExecutable:
 			err = "Cannot execute '%s' (from PATH)\n\n%s\n\nNeed to specify the executable file in Uncrustify settings!" % (command[0], e)
 		else:
 			err = "Cannot execute '%s'\n\n%s" % (command[0], e)
