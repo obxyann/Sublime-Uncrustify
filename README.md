@@ -14,13 +14,13 @@ It is possible to use different code styles according to the languages and filen
 
 1. A **Uncrustify** MUST be installed before **Sublime-Uncrustify** can work.
 
-   >- An Win32 binary is availabled in [**Sourceforge**](http://sourceforge.net/projects/uncrustify/files/).
+   >- An Win32 binary is available in [**Sourceforge**](http://sourceforge.net/projects/uncrustify/files/).
    >
    >- OSX can install via **'brew install uncrustify'** by [**Homebrew**](http://brew.sh/) or **'port install uncrustify'** by [**MacPorts**](https://www.macports.org/).
    >
    >- Other Linux-like OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
 
-   Rememebr the path of your **Uncrustify** executable (for step 3.2).
+   Remember the path of your **Uncrustify** executable (for step 3.2).
 
 2. Configuring the **Uncrustify**:
 
@@ -31,7 +31,7 @@ It is possible to use different code styles according to the languages and filen
 
     Copy the existing config file that closely matches your style and modify[!!] as your version.
 
-    Rememebr the path of your config file for uncrustify (for step 3.3).
+    Remember the path of your config file for uncrustify (for step 3.3).
 
     [!!]: See 'Other Uncrustify Utilities' below...
 
@@ -42,7 +42,7 @@ It is possible to use different code styles according to the languages and filen
     Alternatively, the files can be obtained on **GitHub**:
     https://github.com/obxyann/Sublime-Uncrustify
 
-    Just create a new folde named *Uncrustify* under your **Sublime Text** *Packages* folder and copy the files into.
+    Just create a new folder named *Uncrustify* under your **Sublime Text** *Packages* folder and copy the files into.
 
 3. Configure the **Sublime-Uncrustify**:
 
