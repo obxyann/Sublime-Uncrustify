@@ -14,19 +14,20 @@ NOTE: (1) [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code 
 
 1. A **Uncrustify** MUST be installed before **Sublime-Uncrustify** can work.
 
-   Remember the path of your **Uncrustify** executable (for step 4.2).
+   - An Win32 binary is available in [**Sourceforge**](http://sourceforge.net/projects/uncrustify/files/).
+   
+   - OSX can install via **'brew install uncrustify'** by [**Homebrew**](http://brew.sh/) or **'port install uncrustify'** by [**MacPorts**](https://www.macports.org/).
+   
+   - Other Linux-like OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
 
-   >- An Win32 binary is available in [**Sourceforge**](http://sourceforge.net/projects/uncrustify/files/).
-   >
-   >- OSX can install via **'brew install uncrustify'** by [**Homebrew**](http://brew.sh/) or **'port install uncrustify'** by [**MacPorts**](https://www.macports.org/).
-   >
-   >- Other Linux-like OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
+   Remember the path of your **Uncrustify** executable (for step 4.2).
 
 2. Configuring the **Uncrustify**:
 
     Examine the example config files in *Uncrustify/etc* (from uncrustify source) or *Uncrustify/cfg* (from Win32 pre-built).
 
     or you can find in:
+
     http://sourceforge.net/p/uncrustify/code/ci/master/tree/etc/
 
     Copy the existing config file that closely matches your style and modify(2) as your version.
