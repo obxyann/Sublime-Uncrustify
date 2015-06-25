@@ -1,10 +1,10 @@
 # Sublime-Uncrustify
 
-This is a source code beautifier/formatter plugin that allows the user to use **Uncrustify**[!] to format the C-like languages in **Sublime Text**.
+This is a source code beautifier/formatter plugin that allows the user to use **Uncrustify**(1) to format the C-like languages in **Sublime Text**.
 
 It is possible to use different code styles according to the languages and filenames.
 
-[!]: [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
+NOTE: (1) [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
 ## Screenshot
 
@@ -20,7 +20,7 @@ It is possible to use different code styles according to the languages and filen
    >
    >- Other Linux-like OS please see http://uncrustify.sourceforge.net/ or build the program yourself.
 
-   Remember the path of your **Uncrustify** executable (for step 3.2).
+   Remember the path of your **Uncrustify** executable (for step 4.2).
 
 2. Configuring the **Uncrustify**:
 
@@ -29,22 +29,23 @@ It is possible to use different code styles according to the languages and filen
     or you can find in:
     http://sourceforge.net/p/uncrustify/code/ci/master/tree/etc/
 
-    Copy the existing config file that closely matches your style and modify[!!] as your version.
+    Copy the existing config file that closely matches your style and modify(2) as your version.
 
-    Remember the path of your config file for uncrustify (for step 3.3).
+    Remember the path of your config file for uncrustify (for step 4.3).
 
-    [!!]: See 'Other Uncrustify Utilities' below...
+    NOTE: (2) See 'Other Uncrustify Utilities' below...
 
-2. Install **Sublime-Uncrustify**:
+3. Install **Sublime-Uncrustify**:
 
     The preferred method is to use the Sublime package manager [**Package Control**](https://packagecontrol.io/).
 
     Alternatively, the files can be obtained on **GitHub**:
+
     https://github.com/obxyann/Sublime-Uncrustify
 
     Just create a new folder named *Uncrustify* under your **Sublime Text** *Packages* folder and copy the files into.
 
-3. Configure the **Sublime-Uncrustify**:
+4. Configure the **Sublime-Uncrustify**:
 
     [*sublime text menu*]->[***Preferences***]->[***Package Settings***]->[***Uncrustify***]
 
@@ -58,7 +59,7 @@ It is possible to use different code styles according to the languages and filen
 
 ## Usage
 
-> **NOTE:** Although it can UNDO after a formatted action, please backup/SAVE your important/unsaved file before using!
+> **NOTE: Although it can UNDO after a formatted action, please backup/SAVE your important/unsaved file before using!**
 
 1. Format whole document:
 
