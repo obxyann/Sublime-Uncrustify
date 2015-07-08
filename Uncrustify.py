@@ -1,6 +1,7 @@
 import sublime, sublime_plugin
 import os.path, subprocess, traceback
-import re	# need regular expression operations
+import re		# need regular expression operations
+import fnmatch	# need Unix filename pattern matching
 
 DEFAULT_EXECUTABLE = "uncrustify"
 
@@ -47,7 +48,7 @@ def getConfig():
 			return ""
 		# only if exists
 		if not os.path.exists(config):
-			err = "Cannot find '%s' (from UNCRUSTIFY_CONFIG)" % config
+			err = "Cannot find '%s'\nfrom environment variable UNCRUSTIFY_CONFIG\n\nCheck your Uncrustify settings!" % config
 			sublime.error_message(err)
 			return ""
 
@@ -62,16 +63,22 @@ def getConfigByLang(lang):
 	configs = user_settings.get("uncrustify_config_by_lang", []) or \
 			  settings.get("uncrustify_config_by_lang", [])
 
+	if len(configs) == 0:
+		return "none"
+
 	# find one matched the language
 	for each in configs:
 		for key, config in each.items():
+			if not key or not config:
+				continue
+
 			# only for debug
 			# print(key, config)
 
-			if key and config and lang == key:
+			if lang == key:
 				# only if exists
 				if not os.path.exists(config):
-					err = "Cannot find '%s' (for %s)\n\nCheck your Uncrustify settings!" % (config, lang)
+					err = "Cannot find '%s'\nfor language: %s\n\nCheck your Uncrustify settings!" % (config, lang)
 					sublime.error_message(err)
 					return ""
 				return config
@@ -84,22 +91,49 @@ def getConfigByFilter(path_name):
 	settings = sublime.load_settings("Uncrustify.sublime-settings")
 	user_settings = sublime.load_settings("Preferences.sublime-settings")
 
+	# get filtering rule
+	rule = user_settings.get("uncrustify_filtering_rule", 0) or \
+		   settings.get("uncrustify_filtering_rule", 0)
+
 	# get config setting
 	configs = user_settings.get("uncrustify_config_by_filter", []) or \
 			  settings.get("uncrustify_config_by_filter", [])
 
+	if len(configs) == 0:
+		return "none"
+
+	if not isinstance(rule, int):
+		err = "Invalid filtering rule, not an integer\n\nCheck your Uncrustify settings!"
+		sublime.error_message(err)
+		return ""
+
+	if rule < 0 or rule > 2:
+		err = "Invalid filtering rule: %d, out of range\n\nCheck your Uncrustify settings!" % rule
+		sublime.error_message(err)
+		return ""
+
+	# force to unix style
+	path_name = path_name.replace('\\', '/')
+
+	# only for debug
+	# print("path_name: " + path_name)
+	# print("rule: %d" % rule)
+
 	# find one appeared in path_name
 	for each in configs:
-		for key, config in each.items():
-			# only for debug
-			# print(key, config)
+		for pattern, config in each.items():
+			if not pattern or not config:
+				continue
 
-			if key and config and path_name.find(key):
-			# or key is regular expression
-			# if key and config and re.match(key, path_name)
+			# only for debug
+			# print(pattern, config)
+
+			if (rule == 0 and path_name.find(pattern) >= 0) or \
+			   (rule == 1 and fnmatch.fnmatch(path_name, pattern)) or \
+			   (rule == 2 and re.match(pattern, path_name)):
 				# only if exists
 				if not os.path.exists(config):
-					err = "Cannot find '%s' (for %s)\n\nCheck your Uncrustify settings!" % (config, lang)
+					err = "Cannot find '%s'\nfor pattern: %s\n\nCheck your Uncrustify settings!" % (config, pattern)
 					sublime.error_message(err)
 					return ""
 				return config
@@ -264,7 +298,7 @@ def reformat(view, edit, region):
 			if stderr:
 				err = "Found error in executing '%s':\n\n%s" % (command[0], stderr.decode("utf-8"))
 			else:
-				err = "Found error in executing '%s':\n\nCode %d" % (command[0], return_code)
+				err = "Found error in executing '%s':\n\nCode: %d" % (command[0], return_code)
 			sublime.error_message(err)
 			return
 

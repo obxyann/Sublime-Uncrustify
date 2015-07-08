@@ -12,8 +12,7 @@
   //	pre-built) and modify as your version.
   "uncrustify_config" : "",
 
-  // Overrides the default config (aka "uncrustify_config") when document matches one of below
-  // languages.
+  // Overrides the default config (aka "uncrustify_config") when document matches one of below languages.
   // NOTE:
   //	Don't use other language keywords which uncrustify don't supported.
   "uncrustify_config_by_lang" :
@@ -33,13 +32,38 @@
 	{ "ECMA" : "" }
   ],
 
-  // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when filename appears one
-  // of below strings.
+  // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when path name of document matches
+  // one of below strings/patterns.
   // NOTE:
-  //	Please use long string to avoid the incident match.
+  //	1. The path name uses a forward slash character ("/") as its directory separator.
+  //	2. Comparing with the absolute path name not only the file name.
+  //	3. Please use a good string to avoid the incident match.
+  //	4. You can use "Open Uncrustify Config - Matches Current Document" in Uncrustify's Package Settings
+  //	   to test the matching.
   "uncrustify_config_by_filter" :
   [
 	// For example:
-	// { "C:/project-1/3rd-party/libjpeg" : "C:/cfg/linux.cfg" }
-  ]
+	// { "C:/project-abc/3rd-party/libjpeg" : "C:/cfg/linux.cfg" }
+  ],
+
+  // When uses "uncrustify_config_by_filter", the filtering rule is
+  //	0: Literal text, check if the string appeared inside as a subset. This is default.
+  //	1: Unix wildcards, use the special pattern characters *,?,[seq],[!seq]...
+  //	   For example:
+  //	   { "*/libjpeg/*" : "C:/cfg/linux.cfg" }
+  //	2: Regular expression, er... yah regular expression.
+  //	   For example:
+  //	   { ".*/libjpeg/.*" : "C:/cfg/linux.cfg" }
+  // NOTE:
+  //	When uses 1 or 2, if the string without pattern characters means to compare EQUAL (not subset)!
+  "uncrustify_filtering_rule" : 0
 }
+
+// NOTE: About UNIX wildcards
+//    https://en.wikipedia.org/wiki/Wildcard_character
+//    Examples:
+//	abc         ONLY 3 character name exactly.
+//	[abc]??     only 3 character name beginning with "a", "b", or "c".
+//	[1-9][A-Z]  only 2 character name starting with a number, and ending with an uppercase letter.
+//	[!A-Z]??    only 3 character name that does not begin with an uppercase letter.
+//	*e[0-9]f    any file ending with "e", a single number, and "f".
