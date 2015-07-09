@@ -18,7 +18,9 @@
   "uncrustify_config_by_lang" :
   [
 	// For example:
-	// { "OC" : "C:/cfg/objc.cfg" }
+	// All Java files use java.cfg and all Objective C files use obj.cfg, others use default...
+	// { "JAVA" : "C:/cfg/java.cfg" },
+	// { "OC" : "C:/cfg/obj.cfg" }
 	{ "C" : "" },
 	{ "CPP" : "" },
 	{ "D" : "" },
@@ -36,26 +38,33 @@
   // one of below strings/patterns.
   // NOTE:
   //	1. The path name uses a forward slash character ("/") as its directory separator.
-  //	2. Comparing with the absolute path name not only the file name.
+  //	2. Comparing with the absolute path name of document not only the file name.
   //	3. Please use a good string to avoid the incident match.
   //	4. You can use "Open Uncrustify Config - Matches Current Document" in Uncrustify's Package Settings
   //	   to test the matching.
   "uncrustify_config_by_filter" :
   [
 	// For example:
-	// { "C:/project-abc/3rd-party/libjpeg" : "C:/cfg/linux.cfg" }
+	// All files in below folders use the custom configs, others use its language or default configs...
+	// { "D:/project/abc/libfoo" : "C:/cfg/foo.cfg" },
+	// { "D:/project/abc/src" : "C:/cfg/abc.cfg" }
   ],
 
   // When uses "uncrustify_config_by_filter", the filtering rule is
   //	0: Literal text, check if the string appeared inside as a subset. This is default.
-  //	1: Unix wildcards, use the special pattern characters *,?,[seq],[!seq]...
   //	   For example:
-  //	   { "*/libjpeg/*" : "C:/cfg/linux.cfg" }
+  //	   { "abc/src/" : "C:/cfg/abc.cfg" }
+  //	1: Unix wildcards, can use the special pattern characters *,?,[seq],[!seq]...
+  //	   For example:
+  //	   { "*abc/src/*" : "C:/cfg/abc.cfg" }
   //	2: Regular expression, er... yah regular expression.
   //	   For example:
-  //	   { ".*/libjpeg/.*" : "C:/cfg/linux.cfg" }
+  //	   { ".*abc/src/.*" : "C:/cfg/abc.cfg" }
   // NOTE:
-  //	When uses 1 or 2, if the string without pattern characters means to compare EQUAL (not subset)!
+  //	1. When uses rule 1 or 2, if the string without pattern characters means to compare to EQUAL!
+  //	   (not a subset string as rule 0)
+  //	2. All above rules are case sensitive!
+  //	   (but rule 1 and 2 can be extended to case insensitive pattern)
   "uncrustify_filtering_rule" : 0
 }
 

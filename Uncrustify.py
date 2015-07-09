@@ -117,7 +117,6 @@ def getConfigByFilter(path_name):
 
 	# only for debug
 	# print("path_name: " + path_name)
-	# print("rule: %d" % rule)
 
 	# find one appeared in path_name
 	for each in configs:
@@ -126,7 +125,7 @@ def getConfigByFilter(path_name):
 				continue
 
 			# only for debug
-			# print(pattern, config)
+			# print(rule, pattern, config)
 
 			if (rule == 0 and path_name.find(pattern) >= 0) or \
 			   (rule == 1 and fnmatch.fnmatch(path_name, pattern)) or \
@@ -190,7 +189,7 @@ def getLanguage(view):
 
 	lang_name = result.group(1) if result else "Plain Text"
 	# only for debug
-	# print(lang_name)
+	# print("lang_name: " + lang_name)
 
 	if lang_name == "Plain Text":
 		# check if match our extension names
@@ -235,7 +234,7 @@ def reformat(view, edit, region):
 	command = []
 
 	# only for debug
-	# print(content)
+	# print("content: " + content)
 
 	# assign the external program
 	program = getExecutable()
@@ -274,7 +273,7 @@ def reformat(view, edit, region):
 	# only for debug
 	#	command[] should like
 	#	['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/my.cfg']
-	# print(command)
+	# print("command[]: " + command)
 
 	# dump command[]
 	msg = ""
@@ -303,7 +302,7 @@ def reformat(view, edit, region):
 			return
 
 		# only for debug
-		# print(output)
+		# print("output: " + output)
 
 		# replace by result
 		view.replace(edit, region, output.decode("utf-8"))
