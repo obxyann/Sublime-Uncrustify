@@ -147,6 +147,7 @@ def guessLanguage(ext_name):
 		 ext_name == ".h" or \
 		 ext_name == ".cxx" or \
 		 ext_name == ".hpp" or \
+		 ext_name == ".hxx" or \
 		 ext_name == ".cc" or \
 		 ext_name == ".cp" or \
 		 ext_name == ".C" or \
@@ -171,7 +172,7 @@ def guessLanguage(ext_name):
 		return "OC+"
 	elif ext_name == ".vala":
 		return "VALA"
-	elif ext_name == ".sql":
+	elif ext_name == ".sqc":	# embedded SQL
 		return "SQL"
 	elif ext_name == ".es":
 		return "ECMA"
@@ -208,7 +209,7 @@ def getLanguage(view):
 		return "CPP"
 	elif lang_name == "d":
 		return "D"
-	elif lang_name == "c#":
+	elif lang_name == "cs":
 		return "CS"
 	elif lang_name == 'java':
 		return "JAVA"
