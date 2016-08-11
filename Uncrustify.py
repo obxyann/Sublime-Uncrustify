@@ -228,6 +228,8 @@ def getLanguage(view):
 		return "C"
 	elif lang_name == "es":		# not listed in sublime default
 		return "ECMA"
+	# elif lang_name == "js":
+	#	return "ECMA"
 
 	msg = "Unsupported language: %s" % lang_name
 	# sublime.message_dialog(msg)

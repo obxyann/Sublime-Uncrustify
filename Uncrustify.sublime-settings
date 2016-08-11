@@ -34,6 +34,11 @@
 	{ "ECMA" : "" }
   ],
 
+
+
+
+  // Belows are for advance users, who need to apply different styles according by projects, folders...
+
   // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when path name of document matches
   // one of below strings/patterns.
   // NOTE:
@@ -50,13 +55,15 @@
 	// { "D:/project/abc/src" : "C:/cfg/abc.cfg" }
   ],
 
-  // When uses "uncrustify_config_by_filter", the filtering rule is
+  // When uses "uncrustify_config_by_filter", the folder matching rule is
   //	0: Literal text, check if the string appeared inside as a subset. This is default.
   //	   For example:
   //	   { "abc/src/" : "C:/cfg/abc.cfg" }
+  //       for folders like D:/abc/src/, E:/xx/myabc/src/, ...
   //	1: Unix wildcards, can use the special pattern characters *,?,[seq],[!seq]...
   //	   For example:
-  //	   { "*abc/src/*" : "C:/cfg/abc.cfg" }
+  //	   { "*[a]??/src/*" : "C:/cfg/abc.cfg" }
+  //       for folders likes D:/a12/src/, E:/xx/abc/src/, ... but not D:/b12/src/, D:/a123/src/, ...
   //	2: Regular expression, er... yah regular expression.
   //	   For example:
   //	   { ".*abc/src/.*" : "C:/cfg/abc.cfg" }

@@ -28,17 +28,66 @@
 						"caption": "Uncrustify",
 						"children":
 						[
-                            {
-                            	"caption": "Settings – Default",
-                                "command": "open_file",
-                                "args": {"file": "${packages}/Uncrustify/Uncrustify.sublime-settings"}
-                            },
-                            {
-                                "caption": "Settings – User",
-                                "command": "open_file",
-                                "args": {"file": "${packages}/User/Uncrustify.sublime-settings"}
-                            },
-                            { "caption": "-" },
+							{
+								"caption": "Settings – Default",
+								"command": "open_file",
+								"args": {"file": "${packages}/Uncrustify/Uncrustify.sublime-settings"}
+							},
+							{
+								"caption": "Settings – User",
+								"command": "open_file",
+								"args": {"file": "${packages}/User/Uncrustify.sublime-settings"}
+							},
+							{ "caption": "-" },
+							{
+								"caption": "Key Bindings – Default",
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/Uncrustify/Default (Windows).sublime-keymap",
+									"platform": "Windows"
+								}
+							},
+							{
+								"caption": "Key Bindings – Default",
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/Uncrustify/Default (OSX).sublime-keymap",
+									"platform": "OSX"
+								}
+							},
+							{
+								"caption": "Key Bindings – Default",
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/Uncrustify/Default (Linux).sublime-keymap",
+									"platform": "Linux"
+								}
+							},
+							{
+								"caption": "Key Bindings – User",
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/User/Default (Windows).sublime-keymap",
+									"platform": "Windows"
+								}
+							},
+							{
+								"caption": "Key Bindings – User",
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/User/Default (OSX).sublime-keymap",
+									"platform": "OSX"
+								}
+							},
+							{
+								"caption": "Key Bindings – User",
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/User/Default (Linux).sublime-keymap",
+									"platform": "Linux"
+								}
+							},
+							{ "caption": "-" },
 							{
 								"caption": "Open Uncrustify Config - Default",
 								"command": "uncrustify_open_cfg"

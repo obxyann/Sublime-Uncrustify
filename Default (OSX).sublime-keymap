@@ -1,0 +1,6 @@
+[
+	// 'F'ormat 'D'ocument
+	{ "keys": ["super+f","super+d"], "command": "uncrustify_document" },
+	// 'F'ormat 'S'election
+	{ "keys": ["super+f","super+s"], "command": "uncrustify_selection" }
+]

@@ -1,0 +1,6 @@
+[
+	// 'F'ormat 'D'ocument
+	{ "keys": ["ctrl+f","ctrl+d"], "command": "uncrustify_document" },
+	// 'F'ormat 'S'election
+	{ "keys": ["ctrl+f","ctrl+s"], "command": "uncrustify_selection" }
+]
