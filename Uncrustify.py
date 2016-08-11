@@ -1,20 +1,30 @@
-import sublime, sublime_plugin
-import os.path, subprocess, traceback
-import re		# need regular expression operations
-import fnmatch	# need Unix filename pattern matching
+import sublime
+import sublime_plugin
+import os.path
+import subprocess
+import re			# need regular expression operations
+import fnmatch		# need Unix filename pattern matching
+# import traceback
 
 DEFAULT_EXECUTABLE = "uncrustify"
+DEFAULT_RULE = 0
+
+def getSetting(name):
+	# load settings
+	user_settings = sublime.load_settings("Preferences.sublime-settings")
+	settings = sublime.load_settings("Uncrustify.sublime-settings")
+
+	# get setting
+	value = user_settings.get(name) or settings.get(name)
+
+	return value;
 
 def getExecutable():
-	# load settings
-	settings = sublime.load_settings("Uncrustify.sublime-settings")
-	user_settings = sublime.load_settings("Preferences.sublime-settings")
-
 	# get executable setting
-	executable = user_settings.get("uncrustify_executable") or \
-				 settings.get("uncrustify_executable")
+	executable = getSetting("uncrustify_executable")
+
 	if executable:
-		# only if exists
+		# check if a file exists
 		if not os.path.exists(executable):
 			err = "Cannot find '%s'\n\nCheck your Uncrustify settings!" % executable
 			sublime.error_message(err)
@@ -26,15 +36,11 @@ def getExecutable():
 	return executable
 
 def getConfig():
-	# load settings
-	settings = sublime.load_settings("Uncrustify.sublime-settings")
-	user_settings = sublime.load_settings("Preferences.sublime-settings")
-
 	# get default config setting
-	config = user_settings.get("uncrustify_config") or \
-			 settings.get("uncrustify_config")
+	config = getSetting("uncrustify_config")
+
 	if config:
-		# only if exists
+		# check if a file exists
 		if not os.path.exists(config):
 			err = "Cannot find '%s'\n\nCheck your Uncrustify settings!" % config
 			sublime.error_message(err)
@@ -42,11 +48,13 @@ def getConfig():
 	else:
 		# try from environment variable
 		config = os.getenv("UNCRUSTIFY_CONFIG", "")
+
 		if not config:
 			err = "Need to specify the config file in Uncrustify settings\nor set UNCRUSTIFY_CONFIG in OS!"
 			sublime.error_message(err)
 			return ""
-		# only if exists
+
+		# check if a file exists
 		if not os.path.exists(config):
 			err = "Cannot find '%s'\nfrom environment variable UNCRUSTIFY_CONFIG\n\nCheck your Uncrustify settings!" % config
 			sublime.error_message(err)
@@ -55,15 +63,10 @@ def getConfig():
 	return config
 
 def getConfigByLang(lang):
-	# load settings
-	settings = sublime.load_settings("Uncrustify.sublime-settings")
-	user_settings = sublime.load_settings("Preferences.sublime-settings")
-
 	# get config setting
-	configs = user_settings.get("uncrustify_config_by_lang", []) or \
-			  settings.get("uncrustify_config_by_lang", [])
+	configs = getSetting("uncrustify_config_by_lang")
 
-	if len(configs) == 0:
+	if not configs:
 		return "none"
 
 	# find one matched the language
@@ -76,7 +79,7 @@ def getConfigByLang(lang):
 			# print(key, config)
 
 			if lang == key:
-				# only if exists
+				# check if a file exists
 				if not os.path.exists(config):
 					err = "Cannot find '%s'\nfor language: %s\n\nCheck your Uncrustify settings!" % (config, lang)
 					sublime.error_message(err)
@@ -87,20 +90,20 @@ def getConfigByLang(lang):
 	return "none"
 
 def getConfigByFilter(path_name):
-	# load settings
-	settings = sublime.load_settings("Uncrustify.sublime-settings")
-	user_settings = sublime.load_settings("Preferences.sublime-settings")
-
-	# get filtering rule
-	rule = user_settings.get("uncrustify_filtering_rule", 0) or \
-		   settings.get("uncrustify_filtering_rule", 0)
+	if not path_name:
+		return "none"
 
 	# get config setting
-	configs = user_settings.get("uncrustify_config_by_filter", []) or \
-			  settings.get("uncrustify_config_by_filter", [])
+	configs = getSetting("uncrustify_config_by_filter")
 
-	if len(configs) == 0:
+	if not configs:
 		return "none"
+
+	# get filtering rule
+	rule = getSetting("uncrustify_filtering_rule")
+
+	if not rule:
+		rule = DEFAULT_RULE
 
 	if not isinstance(rule, int):
 		err = "Invalid filtering rule, not an integer\n\nCheck your Uncrustify settings!"
@@ -130,7 +133,7 @@ def getConfigByFilter(path_name):
 			if (rule == 0 and path_name.find(pattern) >= 0) or \
 			   (rule == 1 and fnmatch.fnmatch(path_name, pattern)) or \
 			   (rule == 2 and re.match(pattern, path_name)):
-				# only if exists
+				# check if a file exists
 				if not os.path.exists(config):
 					err = "Cannot find '%s'\nfor pattern: %s\n\nCheck your Uncrustify settings!" % (config, pattern)
 					sublime.error_message(err)
@@ -141,56 +144,48 @@ def getConfigByFilter(path_name):
 	return "none"
 
 def guessLanguage(ext_name):
-	if ext_name == ".c":
-		return "C"
-	elif ext_name == ".cpp" or \
-		 ext_name == ".h" or \
-		 ext_name == ".cxx" or \
-		 ext_name == ".hpp" or \
-		 ext_name == ".hxx" or \
-		 ext_name == ".cc" or \
-		 ext_name == ".cp" or \
-		 ext_name == ".C" or \
-		 ext_name == ".CPP" or \
-		 ext_name == ".c++":
-		return "CPP"
-	elif ext_name == ".d" or \
-		 ext_name == ".di":
-		return "D"
-	elif ext_name == ".cs":
-		return "CS"
-	elif ext_name == '.java':
-		return "JAVA"
-	elif ext_name == ".pawn" or \
-		 ext_name == ".p" or \
-		 ext_name == ".sma" or \
-		 ext_name == ".inl":
-		return "PAWN"
-	elif ext_name == ".m":
-		return "OC"
-	elif ext_name == ".mm":
-		return "OC+"
-	elif ext_name == ".vala":
-		return "VALA"
-	elif ext_name == ".sqc":	# embedded SQL
-		return "SQL"
-	elif ext_name == ".es":
-		return "ECMA"
+	lang_dict = {
+		".c": "C",
+		".cpp": "CPP",
+		".h": "CPP",
+		".cxx": "CPP",
+		".hxx": "CPP",
+		".cc": "CPP",
+		".cp": "CPP",
+		".C": "CPP",
+		".CPP": "CPP",
+		".c++": "CPP",
+		".d": "D",
+		".di": "D",
+		".cs": "CS",
+		".java": "JAVA",
+		".pawn": "PAWN",
+		".p": "PAWN",
+		".sma": "PAWN",
+		".m": "OC",
+		".mm": "OC+",
+		".vala": "VALA",
+		".sqc": "SQL",		# embedded SQL
+		".es": "ECMA"
+	}
+	lang = lang_dict.get(ext_name, "")
 
-	msg = "Unknown file extension: %s" % ext_name
-	# sublime.message_dialog(msg)
-	sublime.status_message(msg)
+	if not lang:
+		msg = "Unknown file extension: %s" % ext_name
+		# sublime.message_dialog(msg)
+		sublime.status_message(msg)
 
-	return ""
+	return lang
 
 def getLanguage(view):
 	# get topmost scope
 	scope = view.scope_name(view.sel()[0].end())
 
  	# should be source.<lang_name>
-	result = re.search("\\bsource\\.([a-z+\-]+)", scope)
+	result = re.search("\\bsource\\.([a-z0-9+\-]+)", scope)
 
 	lang_name = result.group(1) if result else "Plain Text"
+
 	# only for debug
 	# print("lang_name: " + lang_name)
 
@@ -206,36 +201,27 @@ def getLanguage(view):
 		file_name, ext_name = os.path.splitext(path)
 		return guessLanguage(ext_name)
 
-	if lang_name == "c":
-		return "C"
-	elif lang_name == "c++":
-		return "CPP"
-	elif lang_name == "d":
-		return "D"
-	elif lang_name == "cs":
-		return "CS"
-	elif lang_name == 'java':
-		return "JAVA"
-	elif lang_name == "pawn":	# not listed in sublime default
-		return "PAWN"
-	elif lang_name == "objc":
-		return "OC"
-	elif lang_name == "objc++":
-		return "OC+"
-	elif lang_name == "vala":	# not listed in sublime default
-		return "VALA"
-	elif lang_name == "sql":
-		return "C"
-	elif lang_name == "es":		# not listed in sublime default
-		return "ECMA"
-	# elif lang_name == "js":
-	#	return "ECMA"
+	lang_dict = {
+		'c': 'C',
+		'c++': 'CPP',
+		'd': 'D',
+		'cs': 'CS',
+		'java': 'JAVA',
+		'pawn': 'PAWN',		# not listed in sublime default, just for the future
+		'objc': 'OC',
+		'objc++': 'OC+',
+		'vala': 'VALA',		# not listed in sublime default, just for the future
+		'es': 'ECMA',		# not listed in sublime default, just for the future
+		# 'js': "ECMA"
+	}
+	lang = lang_dict.get(lang_name, "")
 
-	msg = "Unsupported language: %s" % lang_name
-	# sublime.message_dialog(msg)
-	sublime.status_message(msg)
+	if not lang:
+		msg = "Unsupported language: %s" % lang_name
+		# sublime.message_dialog(msg)
+		sublime.status_message(msg)
 
-	return ""
+	return lang
 
 def reformat(view, edit, region):
 	content = view.substr(region)
@@ -353,7 +339,8 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 		# 	...
 		region = sels[0]
 		if region.empty():
-			sublime.message_dialog("No selection!")
+			# sublime.message_dialog("No selection!")
+			sublime.status_message("No selection!")
 			return
 
 		# go
