@@ -178,7 +178,9 @@ def guessLanguage(ext_name):
 		return "ECMA"
 
 	msg = "Unknown file extension: %s" % ext_name
-	sublime.message_dialog(msg)
+	# sublime.message_dialog(msg)
+	sublime.status_message(msg)
+
 	return ""
 
 def getLanguage(view):
@@ -197,7 +199,8 @@ def getLanguage(view):
 		path = view.file_name()
 		if not path:
 			msg = "Unknown language: %s" % lang_name
-			sublime.message_dialog(msg)
+			# sublime.message_dialog(msg)
+			sublime.status_message(msg)
 			return ""
 
 		file_name, ext_name = os.path.splitext(path)
@@ -227,7 +230,9 @@ def getLanguage(view):
 		return "ECMA"
 
 	msg = "Unsupported language: %s" % lang_name
-	sublime.message_dialog(msg)
+	# sublime.message_dialog(msg)
+	sublime.status_message(msg)
+
 	return ""
 
 def reformat(view, edit, region):
