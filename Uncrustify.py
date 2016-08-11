@@ -22,7 +22,6 @@ def getSetting(name):
 def getExecutable():
 	# get executable setting
 	executable = getSetting("uncrustify_executable")
-
 	if executable:
 		# check if a file exists
 		if not os.path.exists(executable):
@@ -38,7 +37,6 @@ def getExecutable():
 def getConfig():
 	# get default config setting
 	config = getSetting("uncrustify_config")
-
 	if config:
 		# check if a file exists
 		if not os.path.exists(config):
@@ -65,7 +63,6 @@ def getConfig():
 def getConfigByLang(lang):
 	# get config setting
 	configs = getSetting("uncrustify_config_by_lang")
-
 	if not configs:
 		return "none"
 
@@ -95,21 +92,17 @@ def getConfigByFilter(path_name):
 
 	# get config setting
 	configs = getSetting("uncrustify_config_by_filter")
-
 	if not configs:
 		return "none"
 
 	# get filtering rule
 	rule = getSetting("uncrustify_filtering_rule")
-
 	if not rule:
 		rule = DEFAULT_RULE
-
 	if not isinstance(rule, int):
 		err = "Invalid filtering rule, not an integer\n\nCheck your Uncrustify settings!"
 		sublime.error_message(err)
 		return ""
-
 	if rule < 0 or rule > 2:
 		err = "Invalid filtering rule: %d, out of range\n\nCheck your Uncrustify settings!" % rule
 		sublime.error_message(err)
@@ -168,12 +161,12 @@ def guessLanguage(ext_name):
 		".sqc": "SQL",		# embedded SQL
 		".es": "ECMA"
 	}
-	lang = lang_dict.get(ext_name, "")
-
+	lang = lang_dict.get(ext_name)
 	if not lang:
 		msg = "Unknown file extension: %s" % ext_name
 		# sublime.message_dialog(msg)
 		sublime.status_message(msg)
+		return ""
 
 	return lang
 
@@ -202,48 +195,36 @@ def getLanguage(view):
 		return guessLanguage(ext_name)
 
 	lang_dict = {
-		'c': 'C',
-		'c++': 'CPP',
-		'd': 'D',
-		'cs': 'CS',
-		'java': 'JAVA',
-		'pawn': 'PAWN',		# not listed in sublime default, just for the future
-		'objc': 'OC',
-		'objc++': 'OC+',
-		'vala': 'VALA',		# not listed in sublime default, just for the future
-		'es': 'ECMA',		# not listed in sublime default, just for the future
-		# 'js': "ECMA"
+		"c": "C",
+		"c++": "CPP",
+		"d": "D",
+		"cs": "CS",
+		"java": "JAVA",
+		"pawn": "PAWN",		# not listed in sublime default, just for the future
+		"objc": "OC",
+		"objc++": "OC+",
+		"vala": "VALA",		# not listed in sublime default, just for the future
+		"es": "ECMA"		# not listed in sublime default, just for the future
 	}
-	lang = lang_dict.get(lang_name, "")
-
+	lang = lang_dict.get(lang_name)
 	if not lang:
 		msg = "Unsupported language: %s" % lang_name
 		# sublime.message_dialog(msg)
 		sublime.status_message(msg)
+		return ""
 
 	return lang
 
 def reformat(view, edit, region):
-	content = view.substr(region)
-	command = []
-
-	# only for debug
-	# print("content: " + content)
-
 	# assign the external program
 	program = getExecutable()
 	if not program:
 		return
 
-	command.append(program)
-
 	# specify the language override (because input is from stdin)
 	lang = getLanguage(view)
 	if not lang:
 		return
-
-	command.append("-l")
-	command.append(lang)
 
 	# specify the config file:
 	# try 1
@@ -261,28 +242,23 @@ def reformat(view, edit, region):
 		if not config:
 			return
 
-	command.append("-c")
-	command.append(config)
-
-	# only for debug
-	#	command[] should like
-	#	['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/my.cfg']
-	# print("command[]: " + command)
+	command = [program, "-l", lang, "-c", config]
+	# command[] should like
+	# ['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/my.cfg']
 
 	# dump command[]
-	msg = ""
-	for str in command:
-		msg += str
-		msg += " "
-	print("> " + msg + "...")
-	sublime.status_message(msg + "...")
+	msg = ' '.join(command)
+	print("> " + msg + " ...")
+	sublime.status_message(msg + " ...")
 
 	try:
 		# run
 		proc = subprocess.Popen(command, \
 			   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
-		output = proc.communicate(input=content.encode("utf-8"))[0]
+		content = view.substr(region).encode("utf-8")
+
+		output = proc.communicate(input=content)[0]
 
 		# wait return
 		return_code = proc.poll()
@@ -323,7 +299,6 @@ class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
 			# sublime.message_dialog("Empty document!")
 			sublime.status_message("Empty document!")
 			return
-
 		# go
 		reformat(self.view, edit, region)
 
@@ -342,7 +317,6 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 			# sublime.message_dialog("No selection!")
 			sublime.status_message("No selection!")
 			return
-
 		# go
 		reformat(self.view, edit, region)
 
@@ -352,14 +326,12 @@ class UncrustifyOpenCfgCommand(sublime_plugin.WindowCommand):
 		config = getConfig()
 		if not config:
 			return
-
 		# go
 		open_file(self.window, config)
 
 # open the config file which matches current document to edit
 class UncrustifyOpenCfgCurrentCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
-		# get the language
 		lang = getLanguage(self.view)
 		if not lang:
 			return
@@ -379,6 +351,5 @@ class UncrustifyOpenCfgCurrentCommand(sublime_plugin.TextCommand):
 			config = getConfig()
 			if not config:
 				return
-
 		# go
 		open_file(sublime.active_window(), config)
