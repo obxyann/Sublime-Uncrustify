@@ -1,6 +1,6 @@
 [
-	// 'F'ormat 'D'ocument
-	{ "keys": ["super+f","super+d"], "command": "uncrustify_document" },
-	// 'F'ormat 'S'election
-	{ "keys": ["super+f","super+s"], "command": "uncrustify_selection" }
+	// Format Document
+	{ "keys": ["alt+u"], "command": "uncrustify_document" },
+	// Format Selection
+	{ "keys": ["alt+i"], "command": "uncrustify_selection" }
 ]
