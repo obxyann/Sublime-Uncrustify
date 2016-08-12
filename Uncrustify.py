@@ -246,46 +246,61 @@ def reformat(view, edit, region):
 	# command[] should like
 	# ['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/my.cfg']
 
-	# dump command[]
-	msg = ' '.join(command)
-	print("> " + msg + " ...")
-	sublime.status_message(msg + " ...")
+	# show command[]
+	running = ' '.join(command)
+	print("> " + running + " ...")
+	sublime.status_message(running + " ...")
+
+	# prepare the input
+	content = view.substr(region).encode("utf-8")
+
+	platform = sublime.platform()
 
 	try:
 		# run
-		proc = subprocess.Popen(command, \
-			   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+		if platform == "windows":
+			# to hide the console window brings from command
+			si = subprocess.STARTUPINFO()
+			si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+			# si.wShowWindow = subprocess.SW_HIDE 	# this is default provided
 
-		content = view.substr(region).encode("utf-8")
+			proc = subprocess.Popen(command, \
+				   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE, startupinfo = si)
+		else: # "osx" or "linux"
+			proc = subprocess.Popen(command, \
+				   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
-		output = proc.communicate(input=content)[0]
+		# send input and wait for the process terminated
+		outs, errs = proc.communicate(input=content)
 
-		# wait return
-		return_code = proc.poll()
-		if return_code != 0:
-			stderr = proc.communicate()[1]
-			if stderr:
-				err = "Found error in executing '%s':\n\n%s" % (command[0], stderr.decode("utf-8"))
+		# check the return code from Uncrustify
+		ret_code = proc.poll()
+		if ret_code != 0:
+			if errs:
+				msg = errs.decode("utf-8")
+				# slice the last useless part if found (from Uncrustify)
+				pos = msg.find("Try running with -h for usage information")
+				err = "Uncrustify return error %d:\n\n%s" % (ret_code, msg[:pos])
 			else:
-				err = "Found error in executing '%s':\n\nCode: %d" % (command[0], return_code)
+				err = "Uncrustify return error %d:" % ret_code
 			sublime.error_message(err)
 			return
-
-		# only for debug
-		# print("output: " + output)
-
-		# replace by result
-		view.replace(edit, region, output.decode("utf-8"))
 
 	except (OSError, ValueError, subprocess.CalledProcessError, Exception) as e:
 		# only for debug
 		# traceback.print_exc()
 
 		if command[0] == DEFAULT_EXECUTABLE:
-			err = "Cannot execute '%s' (from PATH)\n\n%s\n\nNeed to specify the executable file in Uncrustify settings!" % (command[0], e)
+			err = "Cannot execute '%s' (from PATH):\n\n%s\n\nNeed to specify the executable file in Uncrustify settings!" % (command[0], e)
 		else:
-			err = "Cannot execute '%s'\n\n%s" % (command[0], e)
+			err = "Cannot execute '%s':\n\n%s" % (command[0], e)
 		sublime.error_message(err)
+		return
+
+	# replace by result
+	view.replace(edit, region, outs.decode("utf-8"))
+
+	sublime.status_message(running + " ...done")
 
 def open_file(window, file_name):
 	window.open_file(file_name)
