@@ -10,8 +10,11 @@ DEFAULT_EXECUTABLE = "uncrustify"
 DEFAULT_RULE = 0
 
 def getSetting(name):
-	# load settings
-	user_settings = sublime.load_settings("Preferences.sublime-settings")
+	# User, or project, specific settings. These take priority
+	# over other settings.
+	user_settings = sublime.active_window().active_view().settings()
+
+	# Package specific settings -- fallback.
 	settings = sublime.load_settings("Uncrustify.sublime-settings")
 
 	# get setting
@@ -34,10 +37,25 @@ def getExecutable():
 
 	return executable
 
+# This allows a project specific override (and will normally also pick
+# up the normal settings from the user preferences.) We expand
+# ${project_dir} into the directory where the project file is located,
+# giving projects the ability to specify a relative file name for the
+# uncrustify.cfg (e.g. they might store this within their project)
+def expandConfig(path):
+	variables = {
+		'project_dir': os.path.dirname(sublime.active_window().project_file_name())
+	}
+	# permit '${project_dir}' to allow a configuration file
+	# relative to the project to be specified. 
+	path = sublime.expand_variables(path, variables)
+	return os.path.expandvars(path)
+
 def getConfig():
 	# get default config setting
 	config = getSetting("uncrustify_config")
 	if config:
+		config = expandConfig(config)
 		# check if a file exists
 		if not os.path.exists(config):
 			err = "Cannot find '%s'\n\nCheck your Uncrustify settings!" % config
@@ -53,6 +71,7 @@ def getConfig():
 			return ""
 
 		# check if a file exists
+		config = expandConfig(config)
 		if not os.path.exists(config):
 			err = "Cannot find '%s'\nfrom environment variable UNCRUSTIFY_CONFIG\n\nCheck your Uncrustify settings!" % config
 			sublime.error_message(err)
@@ -77,6 +96,7 @@ def getConfigByLang(lang):
 
 			if lang == key:
 				# check if a file exists
+				config = expandConfig(config)
 				if not os.path.exists(config):
 					err = "Cannot find '%s'\nfor language: %s\n\nCheck your Uncrustify settings!" % (config, lang)
 					sublime.error_message(err)
@@ -127,6 +147,7 @@ def getConfigByFilter(path_name):
 			   (rule == 1 and fnmatch.fnmatch(path_name, pattern)) or \
 			   (rule == 2 and re.match(pattern, path_name)):
 				# check if a file exists
+				config = expandConfig(config)
 				if not os.path.exists(config):
 					err = "Cannot find '%s'\nfor pattern: %s\n\nCheck your Uncrustify settings!" % (config, pattern)
 					sublime.error_message(err)
