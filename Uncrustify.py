@@ -43,11 +43,16 @@ def getExecutable():
 # giving projects the ability to specify a relative file name for the
 # uncrustify.cfg (e.g. they might store this within their project)
 def expandConfig(path):
+	# get project name
+	project_name = sublime.active_window().project_file_name()
+	if not project_name:
+		return path;
+
 	variables = {
-		'project_dir': os.path.dirname(sublime.active_window().project_file_name())
+		'project_dir': os.path.dirname(project_name)
 	}
 	# permit '${project_dir}' to allow a configuration file
-	# relative to the project to be specified. 
+	# relative to the project to be specified.
 	path = sublime.expand_variables(path, variables)
 	return os.path.expandvars(path)
 
