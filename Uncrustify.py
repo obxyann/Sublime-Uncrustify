@@ -45,15 +45,13 @@ def getExecutable():
 def expandConfig(path):
 	# get project name
 	project_name = sublime.active_window().project_file_name()
-	if not project_name:
-		return path;
-
-	variables = {
-		'project_dir': os.path.dirname(project_name)
-	}
-	# permit '${project_dir}' to allow a configuration file
-	# relative to the project to be specified.
-	path = sublime.expand_variables(path, variables)
+	if project_name:
+	    variables = {
+	       'project_dir': os.path.dirname(project_name)
+	    }
+		# permit '${project_dir}' to allow a configuration file
+		# relative to the project to be specified.
+		path = sublime.expand_variables(path, variables)
 	return os.path.expandvars(path)
 
 def getConfig():
