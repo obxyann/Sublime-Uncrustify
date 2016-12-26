@@ -2,7 +2,7 @@
 
 This is a source code beautifier/formatter plugin that allows the user to use **Uncrustify**(1) to format the C-like languages in **Sublime Text**.
 
-It is possible to use different code styles according to the languages and filenames.
+**Sublime-Uncrustify** can setup to read different configures (as different code styles) according to the languages and filenames or projects.
 
 NOTE: (1) [**Uncrustify**](http://uncrustify.sourceforge.net/) is a source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.
 
