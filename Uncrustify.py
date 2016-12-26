@@ -46,9 +46,9 @@ def expandConfig(path):
 	# get project name
 	project_name = sublime.active_window().project_file_name()
 	if project_name:
-	    variables = {
-	       'project_dir': os.path.dirname(project_name)
-	    }
+		variables = {
+		   'project_dir': os.path.dirname(project_name)
+		}
 		# permit '${project_dir}' to allow a configuration file
 		# relative to the project to be specified.
 		path = sublime.expand_variables(path, variables)
@@ -198,7 +198,7 @@ def getLanguage(view):
 	# get topmost scope
 	scope = view.scope_name(view.sel()[0].end())
 
- 	# should be source.<lang_name>
+	# should be source.<lang_name>
 	result = re.search("\\bsource\\.([a-z0-9+\-]+)", scope)
 
 	lang_name = result.group(1) if result else "Plain Text"
