@@ -282,6 +282,8 @@ def reformat(view, edit, region):
 
 	try:
 		# run
+		# TODO: si = None
+		# TODO: if os.name == 'nt':
 		if platform == "windows":
 			# to hide the console window brings from command
 			si = subprocess.STARTUPINFO()
