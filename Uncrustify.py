@@ -188,8 +188,12 @@ def guessLanguage(ext_name):
 	lang = lang_dict.get(ext_name)
 	if not lang:
 		msg = "Unknown file extension: %s" % ext_name
-		# sublime.message_dialog(msg)
-		sublime.status_message(msg)
+		# get popup rule
+		rule = getSetting("uncrustify_popup_unsupport")
+		if rule:
+			sublime.message_dialog(msg)
+		else:
+			sublime.status_message(msg)
 		return ""
 
 	return lang
@@ -211,8 +215,12 @@ def getLanguage(view):
 		path = view.file_name()
 		if not path:
 			msg = "Unknown language: %s" % lang_name
-			# sublime.message_dialog(msg)
-			sublime.status_message(msg)
+			# get popup rule
+			rule = getSetting("uncrustify_popup_unsupport")
+			if rule:
+				sublime.message_dialog(msg)
+			else:
+				sublime.status_message(msg)
 			return ""
 
 		file_name, ext_name = os.path.splitext(path)
@@ -233,8 +241,12 @@ def getLanguage(view):
 	lang = lang_dict.get(lang_name)
 	if not lang:
 		msg = "Unsupported language: %s" % lang_name
-		# sublime.message_dialog(msg)
-		sublime.status_message(msg)
+		# get popup rule
+		rule = getSetting("uncrustify_popup_unsupport")
+		if rule:
+			sublime.message_dialog(msg)
+		else:
+			sublime.status_message(msg)
 		return ""
 
 	return lang

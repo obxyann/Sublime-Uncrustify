@@ -1,5 +1,9 @@
 {
-  // All of these parameters may be supplied in a project settings file.
+  // *** You should not modify the parameters here, just copy needs into the
+  // 'Settings - User' in Uncrustify's Package Settings.
+  //
+  // TIPS:
+  //    All of these parameters can be supplied in a project settings file.
 
   // Specifies the path to uncrustify binary when not in the PATH.
   // For example:
@@ -10,14 +14,13 @@
   // For example:
   //    "uncrustify_config" : "C:/UTILS/Devel/uncrustify/cfg/defaults.cfg",
   // NOTE:
-  //    1. If not set, then the UNCRUSTIFY_CONFIG environment variable
-  //       is used.
-  //    2. The configuration file name can include '${project_dir}', which
-  //       will be expanded to the directory name of the current project
-  //       settings file. This can help shared projects that include a
-  //       project settings file (and an uncrustify configuration) in their
-  //       SCM.  Additional environment variables are expanded into the
-  //       stream, so you can use ${HOME} or whatever.
+  //    1. If not set, then the UNCRUSTIFY_CONFIG environment variable is used.
+  //    2. The configuration file name can include the path variables like 
+  //       '${project_dir}', which will be expanded to the directory name of
+  //       the current project settings file. This can help shared projects
+  //       that include a project settings file (and an uncrustify
+  //       configuration) in their SCM. Additional environment variables are
+  //       also expanded into the stream, so you can use ${HOME} or whatever.
   //
   // For example:
   //    "uncrustify_config" : "${project_dir}/uncrustify.cfg"
@@ -25,16 +28,16 @@
   //    "uncrustify_config" : "${HOME}/.uncrustify"
   //
   // P.S:
-  //    You can copy the example config files in Uncrustify/etc (Source) or
-  //    Uncrustify/cfg (Win32 pre-built) and modify as your version.
+  //    You can find/modify the example config files in Uncrustify/etc (from
+  //    uncrustify's source) or Uncrustify/cfg (from uncrustify's pre-built).
   "uncrustify_config" : "",
 
   // Overrides the default config (aka "uncrustify_config") when document
   // matches one of below languages.
   // NOTE:
-  //    Only those languages supported by uncrustify may be used here.  The
-  //    names used here are the names uncrustify gives to the language, and
-  //    must match.
+  //    Only those languages supported by uncrustify may be used here. The
+  //    language names must be the names uncrustify gives to the language
+  //    (see uncrustify doc).
   "uncrustify_config_by_lang" :
   [
     // For example:
@@ -55,61 +58,66 @@
     { "ECMA" : "" }
   ],
 
-
-  // These are for advanced users, who need to apply different styles
-  // for different folders or projects. (Note however that this package now
-  // supports project settings files, and those should be used instead.)
-  // These settings can be used within project files to provide more fine
-  // grained control though, for example a project that uses diferent
-  // styles for different subdirectories can use this.
-
   // Overrides the "uncrustify_config" and "uncrustify_config_by_lang" when
   // the path name of document matches one of these strings or patterns.
+  //
+  // These are for advanced users, who need to apply different styles for
+  // different folders or projects. (However that this package now supports
+  // project settings files and those should be used instead. See note 2 in
+  // 'uncrustify_config')
+  // This setting can be used within project files to provide more fine grained
+  // control though, for example a project that uses diferent styles for
+  // different subdirectories can use this.
+  //
   // NOTE:
-  //    1. The path name uses a forward slash character ("/") as its
-  //       directory separator.
-  //    2. The match is performed against the absolute path of the file
-  //       name, including the full directory.
-  //    3. You can use "Open Uncrustify Config - Matches Current Document"
-  //       in Uncrustify's Package Settings to test the matching.
+  //    1. The path name uses a forward slash character ("/") as its directory
+  //       separator.
+  //    2. The match is performed against the absolute path of the file name,
+  //       including the full directory.
+  //    3. You can use "Open Uncrustify Config - Matches Current Document" in
+  //       Uncrustify's Package Settings to test the matching.
   "uncrustify_config_by_filter" :
   [
     // For example:
-    // All files in below folders use the custom configs, others use its
-    // language or default configs...
-    // { "D:/project/abc/libfoo" : "C:/cfg/foo.cfg" },
-    // { "D:/project/abc/src" : "C:/cfg/abc.cfg" }
+    //   All files inside below folders use the custom config, others use its
+    //   language or default config.
+    //   { "D:/project/abc/libfoo" : "C:/cfg/foo.cfg" },
+    //   { "D:/project/abc/src" : "C:/cfg/abc.cfg" }
   ],
 
-  // When uses "uncrustify_config_by_filter", the folder matching rule is
-  //    0: Literal text, check if the string appeared inside as a subset.
-  //       the This is default.  For example:
-  //       { "abc/src/" : "C:/cfg/abc.cfg" }
-  //       for folders like D:/abc/src/, E:/xx/myabc/src/, ...
-  //    1: Unix filename globbing, can use the special pattern characters
-  //       *,?,[seq],[!seq]... (Also known as "wildcard characters").
+  // When uses "uncrustify_config_by_filter", the folder matching rule is...
+  //    0: Literal text (default), just checks if it contains the string.
   //       For example:
-  //       { "*foo/src/*" : "C:/cfg/abc.cfg" }
-  //       See file name globbing information.
-  //    2: Regular expression, er... yah regular expression.
+  //         { "abc/src/" : "C:/cfg/abc.cfg" }
+  //         means folders like D:/abc/src/, E:/xx/myabc/src/, ...
+  //    1: Unix filename globbing, checks by the special pattern which uses
+  //       *,?,[seq],[!seq],... (Also known as "wildcard characters").
   //       For example:
-  //       { ".*abc/src/.*" : "C:/cfg/abc.cfg" }
+  //         { "*foo/src/*" : "C:/cfg/abc.cfg" }
+  //    2: Regular expression, er... uses the regular expression ~.~
+  //       For example:
+  //         { ".*abc/src/.*" : "C:/cfg/abc.cfg" }
   // NOTE:
   //    1. When using rule 1 or 2, a string without pattern matching characters
-  //       must match exactly, (not a subset string as rule 0).
-  //    2. All above rules are case sensitive!
-  //       (but rule 1 and 2 can be extended to case insensitive pattern)
-  "uncrustify_filtering_rule" : 0
+  //       must full matched exactly! It don't fallback to rule 0.
+  //    2. Rule 0 is case sensitive, rule 1 and 2 can be expanded to case
+  //       insensitive pattern.
+  "uncrustify_filtering_rule" : 0,
+
+  // When actions on those unsupported files will pop up a warning message,
+  // otherwise shows on the status bar. 
+  "uncrustify_popup_unsupport" : true,
 }
 
-// NOTE: About UNIX wildcards
-//    https://en.wikipedia.org/wiki/Wildcard_character
-//    Examples:
-//  abc         ONLY 3 character name exactly.
-//  [abc]       only 3 character name beginning with "a", "b", or "c".
-//  [1-9][A-Z]  only 2 character name starting with a digit other than 0,
-//              and ending with an uppercase letter.
-//  [!A-Z]      only 3 character name that does not begin with an uppercase
+// MEMO: About UNIX wildcards...
+// See https://en.wikipedia.org/wiki/Wildcard_character
+//     https://en.wikipedia.org/wiki/Glob_(programming)
+// Examples:
+//   abc        ONLY 3 character name exactly.
+//   [abc]      only 3 character name beginning with "a", "b", or "c".
+//   [1-9][A-Z] only 2 character name starting with a digit other than 0, and
+//              ending with an uppercase letter.
+//   [!A-Z]     only 3 character name that does not begin with an uppercase
 //              letter.
-//  *e[0-9]f    any file ending with "e", a single number, and "f".
-//  *.[ch]      any file name ending in .c or .h (e.g. C source files)
+//   *e[0-9]f   any file ending with "e", a single number, and "f".
+//   *.[ch]     any file name ending in .c or .h (e.g. C source files)
