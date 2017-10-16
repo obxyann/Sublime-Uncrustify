@@ -447,7 +447,7 @@ def open_file(window, file_name):
 class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
         def run(self, edit):
                 # make full view as region
-                region = sublime.Region(605, self.view.size())
+                region = sublime.Region(0, self.view.size())
                 if region.empty():
                         # sublime.message_dialog("Empty document!")
                         sublime.status_message("Empty document!")
