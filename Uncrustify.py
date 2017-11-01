@@ -491,7 +491,7 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 				if ch != ' ' and ch != '\t':
 					break
 				pos += 1
-		return pos
+			return pos
 
 		def get_indentation_count(view, start):
 			indent_count = 0
