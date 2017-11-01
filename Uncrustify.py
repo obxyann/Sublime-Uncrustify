@@ -9,6 +9,8 @@ import fnmatch		# need Unix filename pattern matching
 DEFAULT_EXECUTABLE = "uncrustify"
 DEFAULT_RULE = 0
 
+keep_quiet = False	# force all messages goto the status bar (do not pop dialog to the user)
+
 def getSetting(name):
 	# User, or project, specific settings. These take priority
 	# over other settings.
@@ -189,8 +191,8 @@ def guessLanguage(ext_name):
 	if not lang:
 		msg = "Unknown file extension: %s" % ext_name
 		# get popup rule
-		rule = getSetting("uncrustify_popup_unsupport")
-		if rule:
+		rule = getSetting("uncrustify_popup_unsupport") and not keep_quiet
+		if rule == True:
 			sublime.message_dialog(msg)
 		else:
 			sublime.status_message(msg)
@@ -216,8 +218,8 @@ def getLanguage(view):
 		if not path:
 			msg = "Unknown language: %s" % lang_name
 			# get popup rule
-			rule = getSetting("uncrustify_popup_unsupport")
-			if rule:
+			rule = getSetting("uncrustify_popup_unsupport") and not keep_quiet
+			if rule == True:
 				sublime.message_dialog(msg)
 			else:
 				sublime.status_message(msg)
@@ -242,8 +244,8 @@ def getLanguage(view):
 	if not lang:
 		msg = "Unsupported language: %s" % lang_name
 		# get popup rule
-		rule = getSetting("uncrustify_popup_unsupport")
-		if rule:
+		rule = getSetting("uncrustify_popup_unsupport") and not keep_quiet
+		if rule == True:
 			sublime.message_dialog(msg)
 		else:
 			sublime.status_message(msg)
@@ -251,7 +253,8 @@ def getLanguage(view):
 
 	return lang
 
-#uncrustify the selection
+# ***WIP*** below codes need to review 
+# Uncrustify the selection
 def format(view, edit, text,region, indent_count, indent_size):
 	# assign the external program
 	program = getExecutable()
@@ -455,7 +458,11 @@ def open_file(window, file_name):
 
 # Uncrustify the document
 class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
-	def run(self, edit):
+	def run(self, edit, **kwargs):
+		# get argument
+		global keep_quiet
+		if 'keep_quiet' in kwargs:
+			keep_quiet = kwargs['keep_quiet']
 		# make full view as region
 		region = sublime.Region(0, self.view.size())
 		if region.empty():
@@ -467,7 +474,11 @@ class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
 
 # Uncrustify only the selection region
 class UncrustifySelectionCommand(sublime_plugin.TextCommand):
-	def run(self, edit):
+	def run(self, edit, **kwargs):
+		# get argument
+		global keep_quiet
+		if 'keep_quiet' in kwargs:
+			keep_quiet = kwargs['keep_quiet']
 		# get selections
 		sels = self.view.sel()
 		# pick 1st selection as region
@@ -480,7 +491,10 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 			sublime.status_message("No selection!")
 			return
 		# go
-		#reformat(self.view, edit, region)
+		reformat(self.view, edit, region)
+
+		return
+		# ***WIP*** below codes need to review 
 
 		def get_line_indentation_pos(view, point):
 			line_region = view.line(point)
@@ -540,6 +554,7 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 # open the config file to edit
 class UncrustifyOpenCfgCommand(sublime_plugin.WindowCommand):
 	def run(self):
+		# get filepath
 		config = getConfig()
 		if not config:
 			return
@@ -549,6 +564,7 @@ class UncrustifyOpenCfgCommand(sublime_plugin.WindowCommand):
 # open the config file which matches current document to edit
 class UncrustifyOpenCfgCurrentCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
+		# get current language
 		lang = getLanguage(self.view)
 		if not lang:
 			return
@@ -569,3 +585,11 @@ class UncrustifyOpenCfgCurrentCommand(sublime_plugin.TextCommand):
 				return
 		# go
 		open_file(sublime.active_window(), config)
+
+# listen sublime event
+class UncrustifyEventListener(sublime_plugin.EventListener):
+	def on_pre_save(self, view):
+		# get on save rule
+		rule = getSetting("uncrustify_format_on_save")
+		if rule == True:
+			view.run_command("uncrustify_document", {"keep_quiet":True})

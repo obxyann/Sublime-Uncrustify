@@ -5,20 +5,20 @@
   // TIPS:
   //    All of these parameters can be supplied in a project settings file.
 
-  // Specifies the path to uncrustify binary when not in the PATH.
+  // Specifies the path to Uncrustify binary when not in the PATH.
   // For example:
   //    "uncrustify_executable" : "C:/UTILS/Devel/uncrustify/uncrustify.exe"
   "uncrustify_executable" : "",
 
-  // Specifies the config file for uncrustify.
+  // Specifies the config file for Uncrustify.
   // For example:
   //    "uncrustify_config" : "C:/UTILS/Devel/uncrustify/cfg/defaults.cfg",
   // NOTE:
   //    1. If not set, then the UNCRUSTIFY_CONFIG environment variable is used.
-  //    2. The configuration file name can include the path variables like 
+  //    2. The configuration file name can include the path variables like
   //       '${project_dir}', which will be expanded to the directory name of
   //       the current project settings file. This can help shared projects
-  //       that include a project settings file (and an uncrustify
+  //       that include a project settings file (and an Uncrustify
   //       configuration) in their SCM. Additional environment variables are
   //       also expanded into the stream, so you can use ${HOME} or whatever.
   //
@@ -29,15 +29,15 @@
   //
   // P.S:
   //    You can find/modify the example config files in Uncrustify/etc (from
-  //    uncrustify's source) or Uncrustify/cfg (from uncrustify's pre-built).
+  //    Uncrustify's source) or Uncrustify/cfg (from uncrustify's pre-built).
   "uncrustify_config" : "",
 
   // Overrides the default config (aka "uncrustify_config") when document
   // matches one of below languages.
   // NOTE:
-  //    Only those languages supported by uncrustify may be used here. The
-  //    language names must be the names uncrustify gives to the language
-  //    (see uncrustify doc).
+  //    Only those languages supported by Uncrustify may be used here. The
+  //    language names must be the names Uncrustify gives to the language
+  //    (see Uncrustify doc).
   "uncrustify_config_by_lang" :
   [
     // For example:
@@ -66,7 +66,7 @@
   // project settings files and those should be used instead. See note 2 in
   // 'uncrustify_config')
   // This setting can be used within project files to provide more fine grained
-  // control though, for example a project that uses diferent styles for
+  // control though, for example a project that uses different styles for
   // different subdirectories can use this.
   //
   // NOTE:
@@ -99,14 +99,22 @@
   //         { ".*abc/src/.*" : "C:/cfg/abc.cfg" }
   // NOTE:
   //    1. When using rule 1 or 2, a string without pattern matching characters
-  //       must full matched exactly! It don't fallback to rule 0.
+  //       must full matched exactly! It don't fall back to rule 0.
   //    2. Rule 0 is case sensitive, rule 1 and 2 can be expanded to case
   //       insensitive pattern.
   "uncrustify_filtering_rule" : 0,
 
-  // When actions on those unsupported files will pop up a warning message,
-  // otherwise shows on the status bar. 
+  // When actions on those unsupported files it will pop up a warning dialog,
+  // otherwise shows messages in the status bar.
   "uncrustify_popup_unsupport" : true,
+
+  // Performs a format when file on save (aka Auto Format)
+  // CAUTIOUS:
+  //  1. All supported files will perform a 'format document' when saving!
+  //  2. It will not pop dialog for those unsupported files at this time. ('uncrustify_popup_unsupport' will override)
+  //  3. If somehow the Uncrustify crashes your system (before file saved), no temp backups for ALL editing files~
+  //  4. Recommend that only enables this parameter in a project settings file.
+  "uncrustify_format_on_save" : false,
 }
 
 // MEMO: About UNIX wildcards...

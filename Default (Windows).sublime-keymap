@@ -1,6 +1,10 @@
 [
 	// Format Document
 	{ "keys": ["alt+u"], "command": "uncrustify_document" },
+//or
+//	{ "keys": ["ctrl+k","ctrl+d"], "command": "uncrustify_document" },
 	// Format Selection
 	{ "keys": ["alt+i"], "command": "uncrustify_selection" }
+//or
+//	{ "keys": ["ctrl+k","ctrl+f"], "command": "uncrustify_selection" },
 ]
