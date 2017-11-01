@@ -353,7 +353,7 @@ def format(view, edit, text,region, indent_count, indent_size):
 	# converting spaces to tabs(if necessary sublime will convert it to spaces)
 	# but sublime doesn't auto convert spaces to tabs in my settings
 
-	tor=' '*indent_size
+	tor='\t'
 	formatted_code = formatted_code[:(indent_size*indent_count)].replace(tor,'\t')+formatted_code[(indent_size*indent_count):]
 	if indent_count>0:
 		formatted_code=tor+formatted_code
