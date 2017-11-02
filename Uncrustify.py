@@ -492,9 +492,9 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 			sublime.status_message("No selection!")
 			return
 		# go
-		reformat(self.view, edit, region)
+		# reformat(self.view, edit, region)
 
-		return
+		# return
 		# ***WIP*** below codes need to review 
 
 		def get_line_indentation_pos(view, point):
