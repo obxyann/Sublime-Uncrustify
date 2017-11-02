@@ -347,16 +347,17 @@ def format(view, edit, text,region, indent_count, indent_size):
 		index = formatted_code.find('{\n') + 2
 		formatted_code = formatted_code[:index].replace('{\n', '')+formatted_code[index+1:]
 	for x in range(0,indent_count):
-		index = formatted_code.rfind('\n')
+		index = formatted_code.rfind('\n}')
 		formatted_code = formatted_code[:index]
 
 	# converting spaces to tabs(if necessary sublime will convert it to spaces)
 	# but sublime doesn't auto convert spaces to tabs in my settings
 
-	tor='\t'
+	tor=' '*indent_size
 	formatted_code = formatted_code[:(indent_size*indent_count)].replace(tor,'\t')+formatted_code[(indent_size*indent_count):]
 	if indent_count>0:
-		formatted_code=tor+formatted_code
+		formatted_code='\t'+formatted_code
+	
 	# sublime.error_message("%d"%indent_count)
 
 	# replace by result
