@@ -253,7 +253,7 @@ def getLanguage(view):
 
 	return lang
 
-# ***WIP*** below codes need to review 
+# ***WIP*** below codes need to review
 # Uncrustify the selection
 def format(view, edit, text,region, indent_count, indent_size):
 	# assign the external program
@@ -322,9 +322,9 @@ def format(view, edit, text,region, indent_count, indent_size):
 				msg = errs.decode("utf-8")
 				# slice the last useless part if found (from Uncrustify)
 				pos = msg.find("Try running with -h for usage information")
-				err = "Uncrustify return error %d:\n\n%s" % (ret_code, msg[:pos])
+				err = "Uncrustify failed (0x%X)\n\n%s" % (ret_code, msg[:pos])
 			else:
-				err = "Uncrustify return error %d:" % ret_code
+				err = "Uncrustify stopped (0x%X)" % ret_code
 			sublime.error_message(err)
 			return
 
@@ -340,9 +340,9 @@ def format(view, edit, text,region, indent_count, indent_size):
 		return
 
 	formatted_code=outs.decode("utf-8")
-		
+
 	# remove unnecessary things
-		
+
 	for x in range(0,indent_count):
 		index = formatted_code.find('{\n') + 2
 		formatted_code = formatted_code[:index].replace('{\n', '')+formatted_code[index+1:]
@@ -357,7 +357,7 @@ def format(view, edit, text,region, indent_count, indent_size):
 	formatted_code = formatted_code[:(indent_size*indent_count)].replace(tor,'\t')+formatted_code[(indent_size*indent_count):]
 	if indent_count>0:
 		formatted_code='\t'+formatted_code
-	
+
 	# sublime.error_message("%d"%indent_count)
 
 	# replace by result
@@ -432,9 +432,9 @@ def reformat(view, edit, region):
 				msg = errs.decode("utf-8")
 				# slice the last useless part if found (from Uncrustify)
 				pos = msg.find("Try running with -h for usage information")
-				err = "Uncrustify return error %d:\n\n%s" % (ret_code, msg[:pos])
+				err = "Uncrustify failed (0x%X)\n\n%s" % (ret_code, msg[:pos])
 			else:
-				err = "Uncrustify return error %d:" % ret_code
+				err = "Uncrustify stopped (0x%X)" % ret_code
 			sublime.error_message(err)
 			return
 
@@ -492,10 +492,10 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 			sublime.status_message("No selection!")
 			return
 		# go
-		# reformat(self.view, edit, region)
+		reformat(self.view, edit, region)
 
-		# return
-		# ***WIP*** below codes need to review 
+		return
+		# ***WIP*** below codes need to review
 
 		def get_line_indentation_pos(view, point):
 			line_region = view.line(point)
