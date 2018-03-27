@@ -2,14 +2,14 @@ import sublime
 import sublime_plugin
 import os.path
 import subprocess
-import re			# need regular expression operations
-import fnmatch		# need Unix filename pattern matching
+import re           # need regular expression operations
+import fnmatch      # need Unix filename pattern matching
 # import traceback
 
 DEFAULT_EXECUTABLE = "uncrustify"
 DEFAULT_RULE = 0
 
-keep_quiet = False	# force all messages goto the status bar (do not pop dialog to the user)
+keep_quiet = False  # force all messages goto the status bar (do not pop dialog to the user)
 
 def getSetting(name):
 	# User, or project, specific settings. These take priority
@@ -184,7 +184,7 @@ def guessLanguage(ext_name):
 		".m": "OC",
 		".mm": "OC+",
 		".vala": "VALA",
-		".sqc": "SQL",		# embedded SQL
+		".sqc": "SQL",      # embedded SQL
 		".es": "ECMA"
 	}
 	lang = lang_dict.get(ext_name)
@@ -234,11 +234,11 @@ def getLanguage(view):
 		"d": "D",
 		"cs": "CS",
 		"java": "JAVA",
-		"pawn": "PAWN",		# not listed in sublime default, just for the future
+		"pawn": "PAWN",     # not listed in sublime default, just for the future
 		"objc": "OC",
 		"objc++": "OC+",
-		"vala": "VALA",		# not listed in sublime default, just for the future
-		"es": "ECMA"		# not listed in sublime default, just for the future
+		"vala": "VALA",     # not listed in sublime default, just for the future
+		"es": "ECMA"        # not listed in sublime default, just for the future
 	}
 	lang = lang_dict.get(lang_name)
 	if not lang:
@@ -254,118 +254,8 @@ def getLanguage(view):
 	return lang
 
 # ***WIP*** below codes need to review
-# Uncrustify the selection
-def format(view, edit, text,region, indent_count, indent_size):
-	# assign the external program
-	program = getExecutable()
-	if not program:
-		return
 
-	# specify the language override (because input is from stdin)
-	lang = getLanguage(view)
-	if not lang:
-		return
-
-	# specify the config file:
-	# try 1
-	config = getConfigByFilter(view.file_name())
-	if not config:
-		return
-	# try 2
-	if config == "none":
-		config = getConfigByLang(lang)
-		if not config:
-			return
-	# try 3
-	if config == "none":
-		config = getConfig()
-		if not config:
-			return
-
-	command = [program, "-l", lang, "-c", config]
-	# command[] should like
-	# ['C:/path/uncrustify.exe', '-l', 'CPP', '-c', 'C:/path/my.cfg']
-
-	# show command[]
-	running = ' '.join(command)
-	print("> " + running + " ...")
-	sublime.status_message(running + " ...")
-
-	# prepare the input
-	content = text.encode("utf-8")
-
-	platform = sublime.platform()
-
-	try:
-		# run
-		# TODO: si = None
-		# TODO: if os.name == 'nt':
-		if platform == "windows":
-			# to hide the console window brings from command
-			si = subprocess.STARTUPINFO()
-			si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-			# si.wShowWindow = subprocess.SW_HIDE 	# this is default provided
-
-			proc = subprocess.Popen(command, \
-				   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE, startupinfo = si)
-		else: # "osx" or "linux"
-			proc = subprocess.Popen(command, \
-				   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-
-		# send input and wait for the process terminated
-		outs, errs = proc.communicate(input=content)
-
-		# check the return code from Uncrustify
-		ret_code = proc.poll()
-		if ret_code != 0:
-			if errs:
-				msg = errs.decode("utf-8")
-				# slice the last useless part if found (from Uncrustify)
-				pos = msg.find("Try running with -h for usage information")
-				err = "Uncrustify failed (0x%X)\n\n%s" % (ret_code, msg[:pos])
-			else:
-				err = "Uncrustify stopped (0x%X)" % ret_code
-			sublime.error_message(err)
-			return
-
-	except (OSError, ValueError, subprocess.CalledProcessError, Exception) as e:
-		# only for debug
-		# traceback.print_exc()
-
-		if command[0] == DEFAULT_EXECUTABLE:
-			err = "Cannot execute '%s' (from PATH):\n\n%s\n\nNeed to specify the executable file in Uncrustify settings!" % (command[0], e)
-		else:
-			err = "Cannot execute '%s':\n\n%s" % (command[0], e)
-		sublime.error_message(err)
-		return
-
-	formatted_code=outs.decode("utf-8")
-
-	# remove unnecessary things
-
-	for x in range(0,indent_count):
-		index = formatted_code.find('{\n') + 2
-		formatted_code = formatted_code[:index].replace('{\n', '')+formatted_code[index+1:]
-	for x in range(0,indent_count):
-		index = formatted_code.rfind('\n}')
-		formatted_code = formatted_code[:index]
-
-	# converting spaces to tabs(if necessary sublime will convert it to spaces)
-	# but sublime doesn't auto convert spaces to tabs in my settings
-
-	tor=' '*indent_size
-	formatted_code = formatted_code[:(indent_size*indent_count)].replace(tor,'\t')+formatted_code[(indent_size*indent_count):]
-	if indent_count>0:
-		formatted_code='\t'+formatted_code
-
-	# sublime.error_message("%d"%indent_count)
-
-	# replace by result
-	view.replace(edit, region, formatted_code)
-
-	sublime.status_message(running + " ...done")
-
-def reformat(view, edit, region):
+def reformat(view, edit, region, indent):
 	# assign the external program
 	program = getExecutable()
 	if not program:
@@ -414,7 +304,7 @@ def reformat(view, edit, region):
 			# to hide the console window brings from command
 			si = subprocess.STARTUPINFO()
 			si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-			# si.wShowWindow = subprocess.SW_HIDE 	# this is default provided
+			# si.wShowWindow = subprocess.SW_HIDE   # this is default provided
 
 			proc = subprocess.Popen(command, \
 				   stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE, startupinfo = si)
@@ -449,8 +339,14 @@ def reformat(view, edit, region):
 		sublime.error_message(err)
 		return
 
+	formatted_code=outs.decode("utf-8")
+
+	# indent relative to first line's indent level
+	if indent != '':
+		formatted_code=indent+formatted_code.replace('\n', '\n'+indent)
+
 	# replace by result
-	view.replace(edit, region, outs.decode("utf-8"))
+	view.replace(edit, region, formatted_code)
 
 	sublime.status_message(running + " ...done")
 
@@ -471,7 +367,7 @@ class UncrustifyDocumentCommand(sublime_plugin.TextCommand):
 			sublime.status_message("Empty document!")
 			return
 		# go
-		reformat(self.view, edit, region)
+		reformat(self.view, edit, region, '')
 
 # Uncrustify only the selection region
 class UncrustifySelectionCommand(sublime_plugin.TextCommand):
@@ -485,72 +381,31 @@ class UncrustifySelectionCommand(sublime_plugin.TextCommand):
 		# pick 1st selection as region
 		# TODO: try to support multi-selection...
 		# for region in sels
-		# 	...
+		#   ...
 		region = sels[0]
 		if region.empty():
 			# sublime.message_dialog("No selection!")
 			sublime.status_message("No selection!")
 			return
 		# go
-		reformat(self.view, edit, region)
+		# reformat(self.view, edit, region, '')
 
-		return
+		# return
 		# ***WIP*** below codes need to review
 
-		def get_line_indentation_pos(view, point):
-			line_region = view.line(point)
-			pos = line_region.a
-			end = line_region.b
-			while pos < end:
-				ch = view.substr(pos)
-				if ch != ' ' and ch != '\t':
-					break
-				pos += 1
-			return pos
-
-		def get_indentation_count(view, start):
-			indent_count = 0
-			i = start - 1
-			while i > 0:
-				ch = view.substr(i)
-				scope = view.scope_name(i)
-				# Skip preprocessors, strings, characaters and comments
-				if ('string.quoted' in scope or
-						'comment' in scope or 'preprocessor' in scope):
-					extent = view.extract_scope(i)
-					i = extent.a - 1
-					continue
-				else:
-					i -= 1
-
-				if ch == '}':
-					indent_count -= 1
-				elif ch == '{':
-					indent_count += 1
-			if view.substr(start-1)=='\n':
-				indent_count=0
-			# sublime.error_message("%d"%indent_count)
-			return indent_count
-
-		view = self.view
-		for sel in view.sel():
-			start = get_line_indentation_pos(view, min(sel.a, sel.b))
+		for sel in self.view.sel():
+			line = self.view.line(min(sel.a, sel.b))
 			region = sublime.Region(
-				view.line(start).a,  # line start of first line
-				view.line(max(sel.a, sel.b)).b)  # line end of last line
-			indent_count = get_indentation_count(view, start)
-			# Add braces for indentation hack
-			text = '{\n' * (indent_count)
-			text += view.substr(region)
-			text += '\n}' * (indent_count)
-
-			#convert spaces to tabs because otherwise it doesn't work properly
-			#in my settings
-			indent_size=view.settings().get('tab_size')
-			tor = ' ' * (indent_size)
-			text=text.replace(tor,'\t')
-
-			format(self.view, edit, text, region, indent_count, indent_size)
+				line.a,  # line start of first line
+				self.view.line(max(sel.a, sel.b)).b)  # line end of last line
+			line_str = self.view.substr(line)
+			length=len(line_str)
+			pos=0
+			while pos<length:
+				if line_str[pos]!=' ' and line_str[pos]!='\t':
+					break
+				pos+=1
+			reformat(self.view, edit, region, line_str[:pos])
 
 # open the config file to edit
 class UncrustifyOpenCfgCommand(sublime_plugin.WindowCommand):
