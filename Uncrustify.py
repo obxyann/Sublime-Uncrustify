@@ -39,22 +39,18 @@ def getExecutable():
 
 	return executable
 
-# This allows a project specific override (and will normally also pick
-# up the normal settings from the user preferences.) We expand
-# ${project_dir} into the directory where the project file is located,
-# giving projects the ability to specify a relative file name for the
-# uncrustify.cfg (e.g. they might store this within their project)
 def expandConfig(path):
-	# get project name
-	project_name = sublime.active_window().project_file_name()
-	if project_name:
-		variables = {
-		   'project_dir': os.path.dirname(project_name)
-		}
-		# permit '${project_dir}' to allow a configuration file
-		# relative to the project to be specified.
-		path = sublime.expand_variables(path, variables)
-	return os.path.expandvars(path)
+	# Expand Sublime (project) variables in a path.
+
+	# read sublime variables
+	vars = sublime.active_window().extract_variables()
+
+	# keep for backwards compatibility
+	if vars.get('project_path'):
+		vars['project_dir'] = vars['project_path']
+
+	# expand vars in path
+	return sublime.expand_variables(path, vars)
 
 def getConfig():
 	# get default config setting
